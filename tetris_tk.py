@@ -12,6 +12,11 @@ Controls:
     'p'             Pause the game.
 """
 
+"""
+This is steve's first git commit!
+"""
+
+
 from Tkinter import *
 from time import sleep
 from random import randint
@@ -149,7 +154,7 @@ class Board( Frame ):
                 y -= 1
                 
         #self.output() # non-gui diagnostic
-        
+                
         # return the score, calculated by the number of rows deleted.        
         return (100 * rows_deleted) * rows_deleted
                 
