@@ -5,6 +5,7 @@ Tetris game controller
 from GameBoard import *
 from Shapes import *
 from random import randint
+from StatusWindow import *
 
 NO_OF_LEVELS = 10
 SCALE = 20
@@ -60,7 +61,11 @@ class game_controller(object):
         self.status_bar.set("Score: %-7d\t Level: %d " % (
             self.score, self.level+1)
         )
-        
+        #create the status window
+        self.status_window = StatusWindow(parent)
+        self.status_window.pack()
+
+        #create the game board
         self.board = Board(
             parent,
             scale=SCALE,
@@ -71,6 +76,7 @@ class game_controller(object):
         
         self.board.pack(side=BOTTOM)
         
+
         self.parent.bind("<Left>", self.left_callback)
         self.parent.bind("<Right>", self.right_callback)
         self.parent.bind("<Up>", self.up_callback)
@@ -87,7 +93,7 @@ class game_controller(object):
     def handle_move(self, direction):
         #if you can't move then you've hit something
         if not self.shape.move( direction ):
-            
+            self.status_window.log_text("HIT\n")
             # if your heading down then the shape has 'landed'
             if direction == DOWN:
                 self.score += self.board.check_for_complete_row(
@@ -100,11 +106,12 @@ class game_controller(object):
                 # that the check before creating it failed and the
                 # game is over!
                 if self.shape is None:
+                    self.status_window.log_text("GAME OVER!")
                     tkMessageBox.showwarning(
                         title="GAME OVER",
                         message ="Score: %7d\tLevel: %d\t" % (
                             self.score, self.level),
-                        parent=self.parent
+
                         )
                     Toplevel().destroy()
                     self.parent.destroy()
@@ -121,15 +128,18 @@ class game_controller(object):
                 )
                 
                 # Signal that the shape has 'landed'
+                self.status_window.log_text("piece landed\n")
                 return False
         return True
 
     def left_callback( self, event ):
         if self.shape:
+            self.status_window.log_text("LEFT\n")
             self.handle_move( LEFT )
         
     def right_callback( self, event ):
         if self.shape:
+            self.status_window.log_text("RIGHT\n")
             self.handle_move( RIGHT )
 
     def up_callback( self, event ):
@@ -140,15 +150,18 @@ class game_controller(object):
 
     def down_callback( self, event ):
         if self.shape:
+            self.status_window.log_text("DOWN\n")            
             self.handle_move( DOWN )
             
     def a_callback( self, event):
         if self.shape:
             self.shape.rotate(clockwise=True)
+            self.status_window.log_text("ROTATE CLOCKWISE\n")           
             
     def s_callback( self, event):
         if self.shape:
             self.shape.rotate(clockwise=False)
+            self.status_window.text.log_text("ROTATE COUNTERCLOCKWISE\n")           
         
     def p_callback(self, event):
         self.parent.after_cancel( self.after_id )
