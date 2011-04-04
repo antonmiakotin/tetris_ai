@@ -98,9 +98,15 @@ class game_controller(object):
             self.status_window.log_text("HIT")
             # if your heading down then the shape has 'landed'
             if direction == DOWN:
+
+                tmp_score = self.score
                 self.score += self.board.check_for_complete_row(
                     self.shape.blocks
                     )
+                #check for points added                
+                if(self.score > tmp_score):
+                    self.status_window.log_text("POINTS " + str(self.score - tmp_score))
+                    
                 del self.shape
                 self.status_window.log_text("LANDED")
                 self.shape = self.get_next_shape()
@@ -116,9 +122,10 @@ class game_controller(object):
                             self.score, self.level),
 
                         )
-                    Toplevel().destroy()
-                    self.parent.destroy()
-                    sys.exit(0)
+                    #Toplevel().destroy()
+                    #self.parent.destroy()
+                    #sys.exit(0) #took this out so we could copy the log
+                    #text after the system exits
                 
                 # do we go up a level?
                 if (self.level < NO_OF_LEVELS and 
