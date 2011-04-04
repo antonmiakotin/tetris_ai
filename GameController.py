@@ -189,6 +189,7 @@ class game_controller(object):
         """
         Randomly select which tetrominoe will be used next.
         """
+        self.shapes = self.status_window.get_shapes()
         the_shape = self.shapes[ randint(0,len(self.shapes)-1) ]
         self.status_window.new_shape(the_shape)
         return the_shape.check_and_create(self.board)
