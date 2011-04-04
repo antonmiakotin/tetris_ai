@@ -6,6 +6,7 @@ from GameBoard import *
 from Shapes import *
 from random import randint
 from StatusWindow import *
+import tkMessageBox
 
 NO_OF_LEVELS = 10
 SCALE = 20
@@ -75,6 +76,7 @@ class game_controller(object):
             )
         
         self.board.pack(side=BOTTOM)
+        self.board.focus()
         
 
         self.parent.bind("<Left>", self.left_callback)
@@ -93,15 +95,16 @@ class game_controller(object):
     def handle_move(self, direction):
         #if you can't move then you've hit something
         if not self.shape.move( direction ):
-            self.status_window.log_text("HIT\n")
+            self.status_window.log_text("HIT")
             # if your heading down then the shape has 'landed'
             if direction == DOWN:
                 self.score += self.board.check_for_complete_row(
                     self.shape.blocks
                     )
                 del self.shape
+                self.status_window.log_text("LANDED")
                 self.shape = self.get_next_shape()
-                
+
                 # If the shape returned is None, then this indicates that
                 # that the check before creating it failed and the
                 # game is over!
@@ -128,18 +131,17 @@ class game_controller(object):
                 )
                 
                 # Signal that the shape has 'landed'
-                self.status_window.log_text("piece landed\n")
                 return False
         return True
 
     def left_callback( self, event ):
         if self.shape:
-            self.status_window.log_text("LEFT\n")
+            self.status_window.log_text("LEFT")
             self.handle_move( LEFT )
         
     def right_callback( self, event ):
         if self.shape:
-            self.status_window.log_text("RIGHT\n")
+            self.status_window.log_text("RIGHT")
             self.handle_move( RIGHT )
 
     def up_callback( self, event ):
@@ -150,18 +152,18 @@ class game_controller(object):
 
     def down_callback( self, event ):
         if self.shape:
-            self.status_window.log_text("DOWN\n")            
+            self.status_window.log_text("DOWN")            
             self.handle_move( DOWN )
             
     def a_callback( self, event):
         if self.shape:
             self.shape.rotate(clockwise=True)
-            self.status_window.log_text("ROTATE CLOCKWISE\n")           
+            self.status_window.log_text("ROTATE CLOCKWISE")           
             
     def s_callback( self, event):
         if self.shape:
             self.shape.rotate(clockwise=False)
-            self.status_window.text.log_text("ROTATE COUNTERCLOCKWISE\n")           
+            self.status_window.log_text("ROTATE COUNTERCLOCKWISE")           
         
     def p_callback(self, event):
         self.parent.after_cancel( self.after_id )
@@ -181,4 +183,5 @@ class game_controller(object):
         Randomly select which tetrominoe will be used next.
         """
         the_shape = self.shapes[ randint(0,len(self.shapes)-1) ]
+        self.status_window.new_shape(the_shape)
         return the_shape.check_and_create(self.board)

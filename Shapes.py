@@ -48,7 +48,7 @@ class shape(object):
             block = Block(self.board.add_block( coord, colour), coord)
             
             self.blocks.append( block )
-            
+
     def move( self, direction ):
         """
         Move the blocks in the direction indicated by adding (dx, dy) to the
@@ -123,6 +123,7 @@ class shape(object):
         return True
 
 
+
 class shape_limited_rotate( shape ):
     """
     This is a base class for the shapes like the S, Z and I that don't fully
@@ -169,29 +170,25 @@ class l_shape( shape ):
     def check_and_create( cls, board ):
         coords = [(4,0),(3,0),(5,0),(3,1)]
         return super(l_shape, cls).check_and_create(board, coords, "orange")
-    
+
 class reverse_l_shape( shape ):
     @classmethod
     def check_and_create( cls, board ):
         coords = [(5,0),(4,0),(6,0),(6,1)]
         return super(reverse_l_shape, cls).check_and_create(
             board, coords, "green")
-        
 class z_shape( shape_limited_rotate ):
     @classmethod
     def check_and_create( cls, board ):
         coords =[(5,0),(4,0),(5,1),(6,1)]
         return super(z_shape, cls).check_and_create(board, coords, "purple")
-        
 class s_shape( shape_limited_rotate ):
     @classmethod
     def check_and_create( cls, board ):
         coords =[(5,1),(4,1),(5,0),(6,0)]
         return super(s_shape, cls).check_and_create(board, coords, "magenta")
-        
 class i_shape( shape_limited_rotate ):
     @classmethod
     def check_and_create( cls, board ):
         coords =[(4,0),(3,0),(5,0),(6,0)]
         return super(i_shape, cls).check_and_create(board, coords, "blue")
-        

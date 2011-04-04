@@ -10,8 +10,6 @@ Controls:
     'a'             Rotate anti-clockwise (to the left)
     'b'             Rotate clockwise (to the right)
     'p'             Pause the game.
-	
-hi, this is jason... just testing out git
 """
 
 from Tkinter import *

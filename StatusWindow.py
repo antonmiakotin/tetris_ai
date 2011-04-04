@@ -10,7 +10,7 @@ class StatusWindow( Frame ):
         self.window = Toplevel(height = 500, width=500)
         self.scrollbar = Scrollbar(self.window)
         self.scrollbar.pack(side=RIGHT, fill=Y)
-        self.text = Text(self.window, width = 80, height = 10)
+        self.text = Text(self.window, width=80, height=20)
         self.text.pack()
 
         #attach the two together
@@ -18,7 +18,8 @@ class StatusWindow( Frame ):
         self.scrollbar.config(command=self.text.yview)
 
     def log_text(self, string):
-        self.text.insert(END, string)
+        self.text.insert(END, "  " + string + "\n")
+        self.text.yview(END)
 
-        
-
+    def new_shape(self,shape):
+        self.text.insert(END, (repr(shape) + "\n"))
