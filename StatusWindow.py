@@ -1,6 +1,7 @@
 """
 The window to show all of the status stuff
 """
+FILENAME = 'tetris_games.log'
 
 from Tkinter import *
 from Shapes import *
@@ -13,6 +14,8 @@ class StatusWindow( Frame ):
         self.scrollbar.pack(side=RIGHT, fill=Y)
         self.text = Text(self.window, width=80, height=20)
         self.text.pack()
+        self.file = open(FILENAME, 'a')
+        self.file.write("********************New Game!********************\n\n")
 
 #checkboxes frame
         self.shape_check_boxes = Frame(self.window)
@@ -59,11 +62,13 @@ class StatusWindow( Frame ):
         self.scrollbar.config(command=self.text.yview)
 
     def log_text(self, string):
-        self.text.insert(END, "  " + string + "\n")
+        self.text.insert(END, "\t\t" + string + "\n")
         self.text.yview(END)
+        self.file.write("\t\t" + string + "\n")
 
     def new_shape(self,shape):
-        self.text.insert(END, (repr(shape) + "\n"))
+        self.text.insert(END, "\t" + (repr(shape) + "\n"))
+        self.file.write("\t" + (repr(shape) + "\n"))
 
     def get_shapes(self):
         l = []
@@ -85,3 +90,5 @@ class StatusWindow( Frame ):
                     z_shape,
                     s_shape,
                     i_shape ]
+    def __del__(self):
+        self.file.close()
