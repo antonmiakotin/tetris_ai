@@ -66,9 +66,10 @@ class StatusWindow( Frame ):
         self.text.yview(END)
         self.file.write("\t\t" + string + "\n")
 
-    def new_shape(self,shape):
-        self.text.insert(END, "\t" + (repr(shape) + "\n"))
-        self.file.write("\t" + (repr(shape) + "\n"))
+    def new_shape(self,s):
+        if s:
+            self.text.insert(END, "\t" + s.toString() + "\n")
+            self.file.write("\t" + s.toString() + "\n")
 
     def get_shapes(self):
         l = []

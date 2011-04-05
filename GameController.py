@@ -35,7 +35,17 @@ class game_controller(object):
     """
     Main game loop and receives GUI callback events for keypresses etc...
     """
-    def __init__(self, parent):
+    def __init__(self, parent, lines, game_number = 0):
+        self.lines = lines
+        self.auto_mode = False
+        self.game_number = game_number
+        if lines != None:
+            self.lines = shape.list_from_str_list(lines)
+            self.lines_shape_index = 0
+            self.auto_mode = True
+
+        
+
         """
         Intialise the game...
         """
@@ -86,6 +96,7 @@ class game_controller(object):
         self.parent.bind("a", self.a_callback)
         self.parent.bind("s", self.s_callback)
         self.parent.bind("p", self.p_callback)
+        self.parent.bind("q", self.quit_callback)
         
         self.shape = self.get_next_shape()
         #self.board.output()
@@ -115,17 +126,24 @@ class game_controller(object):
                 # that the check before creating it failed and the
                 # game is over!
                 if self.shape is None:
-                    self.status_window.log_text("GAME OVER!")
+                    self.status_window.log_text("********************GAME OVER! SCORE: " + str(self.score))
                     tkMessageBox.showwarning(
                         title="GAME OVER",
                         message ="Score: %7d\tLevel: %d\t" % (
                             self.score, self.level),
 
                         )
-                    #Toplevel().destroy()
-                    #self.parent.destroy()
-                    #sys.exit(0) #took this out so we could copy the log
-                    #text after the system exits
+
+# Someone needs to figure this out... I have no idea how to end a tk session
+# this kind of works, but it leaves a bunch of log windows open, which gets annoying...
+
+
+                    Toplevel().destroy()
+                    self.parent.quit()
+                    self.parent.withdraw()
+                    self.status_window.quit()
+                    self.status_window.destroy()
+                    #sys.exit(0) 
                 
                 # do we go up a level?
                 if (self.level < NO_OF_LEVELS and 
@@ -180,6 +198,9 @@ class game_controller(object):
             type=tkMessageBox.OK)
         self.after_id = self.parent.after( self.delay, self.move_my_shape )
     
+    def quit_callback(self, event):
+        sys.exit(0)
+
     def move_my_shape( self ):
         if self.shape:
             self.handle_move( DOWN )
@@ -187,9 +208,27 @@ class game_controller(object):
         
     def get_next_shape( self ):
         """
-        Randomly select which tetrominoe will be used next.
+        Select the next shape in the list
         """
-        self.shapes = self.status_window.get_shapes()
-        the_shape = self.shapes[ randint(0,len(self.shapes)-1) ]
-        self.status_window.new_shape(the_shape)
-        return the_shape.check_and_create(self.board)
+        if self.lines and len(self.lines) > 0 and self.lines_shape_index < len(self.lines): 
+            the_shape = self.lines[self.lines_shape_index]
+            self.lines_shape_index = self.lines_shape_index + 1
+        else:
+            """
+            If we were in auto mode, that means we have now ran out of pieces
+            Log the score, and move on to the next game
+            """
+            if self.auto_mode == True:
+                print "Game #" + str(self.game_number) + " " + "Score: " + str(self.score)
+                return None #This will end the game
+            
+            """
+            Randomly select which tetrominoe will be used next.
+            """
+            self.shapes = self.status_window.get_shapes()
+            the_shape = self.shapes[ randint(0,len(self.shapes)-1) ]
+
+        #check_and_create is a factory function
+        s = the_shape.check_and_create(self.board)
+        self.status_window.new_shape(s)
+        return s

@@ -36,6 +36,9 @@ class shape(object):
                 return None
         
         return cls( board, coords, colour)
+    
+    def toString():
+        return "SHAPE"
             
     def __init__(self, board, coords, colour ):
         """
@@ -122,7 +125,26 @@ class shape(object):
        
         return True
 
+    @staticmethod
+    def list_from_str_list(lines):
+        lst = []
+        for line in lines:
+            if line == "square_shape\n":
+                lst.append(square_shape)
+            elif line == "t_shape\n":
+                lst.append(t_shape)
+            elif line == "l_shape\n":
+                lst.append(l_shape)
+            elif line == "reverse_l_shape\n":
+                lst.append(reverse_l_shape)
+            elif line == "z_shape\n":
+                lst.append(z_shape)
+            elif line == "s_shape\n":
+                lst.append(s_shape)
+            elif line == "i_shape\n":
+                lst.append(i_shape)
 
+        return lst
 
 class shape_limited_rotate( shape ):
     """
@@ -158,18 +180,26 @@ class square_shape( shape ):
         Override the rotate method for the square shape to do exactly nothing!
         """
         pass
+
+    def toString(self):
+        return "square_shape"
         
 class t_shape( shape ):
     @classmethod
     def check_and_create( cls, board ):
         coords = [(4,0),(3,0),(5,0),(4,1)]
         return super(t_shape, cls).check_and_create(board, coords, "yellow" )
-        
+
+    def toString(self):
+        return "t_shape"
+
 class l_shape( shape ):
     @classmethod
     def check_and_create( cls, board ):
         coords = [(4,0),(3,0),(5,0),(3,1)]
         return super(l_shape, cls).check_and_create(board, coords, "orange")
+    def toString(self):
+        return "l_shape"
 
 class reverse_l_shape( shape ):
     @classmethod
@@ -177,18 +207,29 @@ class reverse_l_shape( shape ):
         coords = [(5,0),(4,0),(6,0),(6,1)]
         return super(reverse_l_shape, cls).check_and_create(
             board, coords, "green")
+    def toString(self):
+        return "reverse_l_shape"
+
 class z_shape( shape_limited_rotate ):
     @classmethod
     def check_and_create( cls, board ):
         coords =[(5,0),(4,0),(5,1),(6,1)]
         return super(z_shape, cls).check_and_create(board, coords, "purple")
+    def toString(self):
+        return "z_shape"
+
 class s_shape( shape_limited_rotate ):
     @classmethod
     def check_and_create( cls, board ):
         coords =[(5,1),(4,1),(5,0),(6,0)]
         return super(s_shape, cls).check_and_create(board, coords, "magenta")
+    def toString(self):
+        return "s_shape"
+
 class i_shape( shape_limited_rotate ):
     @classmethod
     def check_and_create( cls, board ):
         coords =[(4,0),(3,0),(5,0),(6,0)]
         return super(i_shape, cls).check_and_create(board, coords, "blue")
+    def toString(self):
+        return "i_shape"
