@@ -134,16 +134,12 @@ class game_controller(object):
 
                         )
 
-# Someone needs to figure this out... I have no idea how to end a tk session
-# this kind of works, but it leaves a bunch of log windows open, which gets annoying...
-
-
-                    Toplevel().destroy()
+                    #This is the best solution I've come up with so far...
+                    Toplevel().quit()
                     self.parent.quit()
-                    self.parent.withdraw()
-                    self.status_window.quit()
-                    self.status_window.destroy()
-                    #sys.exit(0) 
+                    # self.status_window.quit()
+                    # self.status_window.destroy()
+                    # sys.exit(0) 
                 
                 # do we go up a level?
                 if (self.level < NO_OF_LEVELS and 
