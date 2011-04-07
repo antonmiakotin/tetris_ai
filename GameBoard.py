@@ -122,16 +122,26 @@ class Board( Frame ):
         # return the score, calculated by the number of rows deleted.        
         return (100 * rows_deleted) * rows_deleted
                 
-    def output( self ):
-        for y in xrange(self.max_y):
+    def toString( self ):
+        string = ""
+        board = self.get_board_state()
+        for i in board:
+            string = string + str(i) + "\n"
+        return string
+        
+            
+    def get_board_state(self):
+        board = []
+        for y in range(self.max_y):
             line = []
-            for x in xrange(self.max_x):
+            for x in range(self.max_x):
                 if self.landed.get((x,y), None):
                     line.append("X")
                 else:
                     line.append(".")
-            print "".join(line)
-            
+            board.append(line)
+        return board
+    
     def add_block( self, (x, y), colour):
         """
         Create a block by drawing it on the canvas, return

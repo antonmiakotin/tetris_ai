@@ -9,10 +9,10 @@ from Shapes import *
 class StatusWindow( Frame ):
     def __init__(self, parent):
         Frame.__init__(self, parent)
-        self.window = Toplevel(height = 500, width=500)
+        self.window = Toplevel()
         self.scrollbar = Scrollbar(self.window)
         self.scrollbar.pack(side=RIGHT, fill=Y)
-        self.text = Text(self.window, width=80, height=20)
+        self.text = Text(self.window, width=80, height=40)
         self.text.pack()
         self.file = open(FILENAME, 'a')
         self.file.write("********************New Game!********************\n\n")
@@ -62,14 +62,25 @@ class StatusWindow( Frame ):
         self.scrollbar.config(command=self.text.yview)
 
     def log_text(self, string):
-        self.text.insert(END, "\t\t" + string + "\n")
+
+        self.text.insert(END, string + "\n")
         self.text.yview(END)
-        self.file.write("\t\t" + string + "\n")
+        self.file.write(string + "\n")
+        #add a line if the piece has landed
+        if(string == "LANDED"):
+            self.text.insert(END, "\n")
+            self.file.write("\n")
+
 
     def new_shape(self,s):
         if s:
-            self.text.insert(END, "\t" + s.toString() + "\n")
-            self.file.write("\t" + s.toString() + "\n")
+            self.text.insert(END, s.toString() + "\n")
+            self.file.write(s.toString() + "\n")
+
+    def log_board(self,b):
+        if b:
+            self.text.insert(END, b.toString())
+            self.file.write(b.toString())
 
     def get_shapes(self):
         l = []

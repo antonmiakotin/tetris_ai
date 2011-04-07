@@ -99,7 +99,6 @@ class game_controller(object):
         self.parent.bind("q", self.quit_callback)
         
         self.shape = self.get_next_shape()
-        #self.board.output()
 
         self.after_id = self.parent.after( self.delay, self.move_my_shape )
         
@@ -227,4 +226,5 @@ class game_controller(object):
         #check_and_create is a factory function
         s = the_shape.check_and_create(self.board)
         self.status_window.new_shape(s)
+        self.status_window.log_board(self.board)
         return s
