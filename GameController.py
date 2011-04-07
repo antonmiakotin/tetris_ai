@@ -125,7 +125,7 @@ class game_controller(object):
                 # that the check before creating it failed and the
                 # game is over!
                 if self.shape is None:
-                    self.status_window.log_text("********************GAME OVER! SCORE: " + str(self.score))
+                    self.status_window.log_text("GAME OVER! SCORE: " + str(self.score))
                     tkMessageBox.showwarning(
                         title="GAME OVER",
                         message ="Score: %7d\tLevel: %d\t" % (
