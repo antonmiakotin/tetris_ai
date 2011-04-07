@@ -32,6 +32,7 @@ if __name__ == "__main__":
                 lines = fptr.readlines()
                 theGame = game_controller(root, lines, i - 1)
                 root.mainloop()
+                root.destroy()
                 root.__init__()
                 root.title("Tetris Tk " + str(i))
         else:
@@ -39,3 +40,4 @@ if __name__ == "__main__":
     else:
         theGame = game_controller( root, None )
         root.mainloop()
+        root.destroy()

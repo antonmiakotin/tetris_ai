@@ -134,9 +134,9 @@ class game_controller(object):
 
                         )
 
-                    #This is the best solution I've come up with so far...
                     Toplevel().quit()
                     self.parent.quit()
+
                     # self.status_window.quit()
                     # self.status_window.destroy()
                     # sys.exit(0) 
