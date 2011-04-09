@@ -122,7 +122,7 @@ class Board( Frame ):
         # return the score, calculated by the number of rows deleted.        
         return (100 * rows_deleted) * rows_deleted
                 
-    def toString( self ):
+    def __str__( self ):
         string = ""
         board = self.get_board_state()
         for i in board:

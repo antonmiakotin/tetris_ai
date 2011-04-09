@@ -74,13 +74,13 @@ class StatusWindow( Frame ):
 
     def new_shape(self,s):
         if s:
-            self.text.insert(END, s.toString() + "\n")
-            self.file.write(s.toString() + "\n")
+            self.text.insert(END, str(s) + "\n")
+            self.file.write(str(s) + "\n")
 
     def log_board(self,b):
         if b:
-            self.text.insert(END, b.toString())
-            self.file.write(b.toString())
+            self.text.insert(END, str(b))
+            self.file.write(str(b))
 
     def get_shapes(self):
         l = []

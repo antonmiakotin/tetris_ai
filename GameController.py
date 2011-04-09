@@ -7,6 +7,7 @@ from Shapes import *
 from random import randint
 from StatusWindow import *
 import tkMessageBox
+from BoardStates import *
 
 NO_OF_LEVELS = 10
 SCALE = 20
@@ -227,4 +228,5 @@ class game_controller(object):
         s = the_shape.check_and_create(self.board)
         self.status_window.new_shape(s)
         self.status_window.log_board(self.board)
+        BoardStates.generate_child_states(self.board, the_shape)
         return s

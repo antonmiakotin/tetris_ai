@@ -37,7 +37,7 @@ class shape(object):
         
         return cls( board, coords, colour)
     
-    def toString():
+    def __str__(self):
         return "SHAPE"
             
     def __init__(self, board, coords, colour ):
@@ -181,7 +181,7 @@ class square_shape( shape ):
         """
         pass
 
-    def toString(self):
+    def __str__(self):
         return "square_shape"
         
 class t_shape( shape ):
@@ -190,7 +190,7 @@ class t_shape( shape ):
         coords = [(4,0),(3,0),(5,0),(4,1)]
         return super(t_shape, cls).check_and_create(board, coords, "yellow" )
 
-    def toString(self):
+    def __str__(self):
         return "t_shape"
 
 class l_shape( shape ):
@@ -198,7 +198,7 @@ class l_shape( shape ):
     def check_and_create( cls, board ):
         coords = [(4,0),(3,0),(5,0),(3,1)]
         return super(l_shape, cls).check_and_create(board, coords, "orange")
-    def toString(self):
+    def __str__(self):
         return "l_shape"
 
 class reverse_l_shape( shape ):
@@ -207,7 +207,7 @@ class reverse_l_shape( shape ):
         coords = [(5,0),(4,0),(6,0),(6,1)]
         return super(reverse_l_shape, cls).check_and_create(
             board, coords, "green")
-    def toString(self):
+    def __str__(self):
         return "reverse_l_shape"
 
 class z_shape( shape_limited_rotate ):
@@ -215,7 +215,7 @@ class z_shape( shape_limited_rotate ):
     def check_and_create( cls, board ):
         coords =[(5,0),(4,0),(5,1),(6,1)]
         return super(z_shape, cls).check_and_create(board, coords, "purple")
-    def toString(self):
+    def __str__(self):
         return "z_shape"
 
 class s_shape( shape_limited_rotate ):
@@ -223,7 +223,7 @@ class s_shape( shape_limited_rotate ):
     def check_and_create( cls, board ):
         coords =[(5,1),(4,1),(5,0),(6,0)]
         return super(s_shape, cls).check_and_create(board, coords, "magenta")
-    def toString(self):
+    def __str__(self):
         return "s_shape"
 
 class i_shape( shape_limited_rotate ):
@@ -231,5 +231,5 @@ class i_shape( shape_limited_rotate ):
     def check_and_create( cls, board ):
         coords =[(4,0),(3,0),(5,0),(6,0)]
         return super(i_shape, cls).check_and_create(board, coords, "blue")
-    def toString(self):
+    def __str__(self):
         return "i_shape"
