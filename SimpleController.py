@@ -9,7 +9,7 @@ class simple_controller:
         pieces = []
         
         for i in range(10):
-            Shape.rel_check_and_create(
+            Shape.rel_check_and_create(Shape.square_shape, 
         
     
     

@@ -11,7 +11,7 @@ DOWN = "down"
 direction_d = { "left": (-1, 0), "right": (1, 0), "down": (0, 1) }
 
 class Block(object):
-    def __init__( self, id, (x, y)):
+    def __init__( self, (x, y)):
         self.x = x
         self.y = y
         
@@ -70,9 +70,7 @@ class shape(object):
             
             x = block.x + d_x
             y = block.y + d_y
-            
-            self.board.move_block( block.id, (d_x, d_y) )
-            
+                        
             block.x = x
             block.y = y
         
@@ -116,9 +114,7 @@ class shape(object):
             
             diff_x = x - self.blocks[idx].x 
             diff_y = y - self.blocks[idx].y 
-            
-            self.board.move_block( self.blocks[idx].id, (diff_x, diff_y) )
-            
+                        
             self.blocks[idx].x = x
             self.blocks[idx].y = y
        
