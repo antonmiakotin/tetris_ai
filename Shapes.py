@@ -174,6 +174,16 @@ class square_shape( shape ):
     def check_and_create( cls, board ):
         coords = [(4,0),(5,0),(4,1),(5,1)]
         return super(square_shape, cls).check_and_create(board, coords, "red")
+    
+    #creates shape from given coordinate, relative to top left corner
+    @classmethod
+    def rel_check_and_create( cls, board, coord ):
+        c1 = (coord[0],coord[1])
+        c2 = (coord[0]+1, coord[1])
+        c3 = (coord[0], coord[1]+1)
+        c4 = (coord[0]+1, coord[1]+1)
+        coords = [c1,c2,c3,c4]
+        return super(square_shape, cls).check_and_create(board, coords, "red")
         
     def rotate(self, clockwise=True):
         """
@@ -189,7 +199,17 @@ class t_shape( shape ):
     def check_and_create( cls, board ):
         coords = [(4,0),(3,0),(5,0),(4,1)]
         return super(t_shape, cls).check_and_create(board, coords, "yellow" )
-
+    
+    #creates shape from given coordinate, relative to top left corner
+    @classmethod
+    def rel_check_and_create( cls, board, coord ):
+        c1 = (coord[0],coord[1])
+        c2 = (coord[0]+1, coord[1])
+        c3 = (coord[0]+2, coord[1])
+        c4 = (coord[0]+1, coord[1]+1)
+        coords = [c1,c2,c3,c4]
+        return super(t_shape, cls).check_and_create(board, coords, "yellow")
+        
     def __str__(self):
         return "t_shape"
 
@@ -198,6 +218,17 @@ class l_shape( shape ):
     def check_and_create( cls, board ):
         coords = [(4,0),(3,0),(5,0),(3,1)]
         return super(l_shape, cls).check_and_create(board, coords, "orange")
+        
+    #creates shape from given coordinate, relative to top left corner
+    @classmethod
+    def rel_check_and_create( cls, board, coord ):
+        c1 = (coord[0],coord[1])
+        c2 = (coord[0]+1, coord[1])
+        c3 = (coord[0]+2, coord[1])
+        c4 = (coord[0], coord[1]+1)
+        coords = [c1,c2,c3,c4]
+        return super(l_shape, cls).check_and_create(board, coords, "orange")
+        
     def __str__(self):
         return "l_shape"
 
@@ -207,6 +238,17 @@ class reverse_l_shape( shape ):
         coords = [(5,0),(4,0),(6,0),(6,1)]
         return super(reverse_l_shape, cls).check_and_create(
             board, coords, "green")
+            
+    #creates shape from given coordinate, relative to top left corner
+    @classmethod
+    def rel_check_and_create( cls, board, coord ):
+        c1 = (coord[0],coord[1])
+        c2 = (coord[0]+1, coord[1])
+        c3 = (coord[0]+2, coord[1])
+        c4 = (coord[0]+2, coord[1]+1)
+        coords = [c1,c2,c3,c4]
+        return super(reverse_l_shape, cls).check_and_create(board, coords, "green")
+        
     def __str__(self):
         return "reverse_l_shape"
 
@@ -215,6 +257,17 @@ class z_shape( shape_limited_rotate ):
     def check_and_create( cls, board ):
         coords =[(5,0),(4,0),(5,1),(6,1)]
         return super(z_shape, cls).check_and_create(board, coords, "purple")
+        
+    #creates shape from given coordinate, relative to top left corner
+    @classmethod
+    def rel_check_and_create( cls, board, coord ):
+        c1 = (coord[0],coord[1])
+        c2 = (coord[0]+1, coord[1])
+        c3 = (coord[0]+1, coord[1]+1)
+        c4 = (coord[0]+2, coord[1]+1)
+        coords = [c1,c2,c3,c4]
+        return super(z_shape, cls).check_and_create(board, coords, "purple")
+    
     def __str__(self):
         return "z_shape"
 
@@ -223,6 +276,18 @@ class s_shape( shape_limited_rotate ):
     def check_and_create( cls, board ):
         coords =[(5,1),(4,1),(5,0),(6,0)]
         return super(s_shape, cls).check_and_create(board, coords, "magenta")
+        
+    #creates shape from given coordinate, relative to top left corner
+    @classmethod
+    def rel_check_and_create( cls, board, coord ):
+        c1 = (coord[0]+1,coord[1])
+        c2 = (coord[0]+2, coord[1])
+        c3 = (coord[0], coord[1]+1)
+        c4 = (coord[0]+1, coord[1]+1)
+        coords = [c1,c2,c3,c4]
+        return super(s_shape, cls).check_and_create(board, coords, "magenta")
+        
+        
     def __str__(self):
         return "s_shape"
 
@@ -230,6 +295,16 @@ class i_shape( shape_limited_rotate ):
     @classmethod
     def check_and_create( cls, board ):
         coords =[(4,0),(3,0),(5,0),(6,0)]
+        return super(i_shape, cls).check_and_create(board, coords, "blue")
+        
+    #creates shape from given coordinate, relative to top left corner
+    @classmethod
+    def rel_check_and_create( cls, board, coord ):
+        c1 = (coord[0],coord[1])
+        c2 = (coord[0]+1, coord[1])
+        c3 = (coord[0]+2, coord[1])
+        c4 = (coord[0]+3, coord[1])
+        coords = [c1,c2,c3,c4]
         return super(i_shape, cls).check_and_create(board, coords, "blue")
     def __str__(self):
         return "i_shape"
