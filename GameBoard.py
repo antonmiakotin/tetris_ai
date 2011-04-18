@@ -9,24 +9,8 @@ DOWN = "down"
 
 direction_d = { "left": (-1, 0), "right": (1, 0), "down": (0, 1) }
 
-class status_bar( Frame ):
-    """
-    Status bar to display the score and level
-    """
-    def __init__(self, parent):
-        Frame.__init__( self, parent )
-        self.label = Label( self, bd=1, relief=SUNKEN, anchor=W )
-        self.label.pack( fill=X )
-        
-    def set( self, format, *args):
-        self.label.config( text = format % args)
-        self.label.update_idletasks()
-        
-    def clear( self ):
-        self.label.config(test="")
-        self.label.update_idletasks()
 
-class Board( Frame ):
+class Board():
     """
     The board represents the tetris playing area. A grid of x by y blocks.
     """
@@ -38,7 +22,6 @@ class Board( Frame ):
         max Y (in blocks) = 20
         offset (in pixels) = 3
         """
-        Frame.__init__(self, parent)
         
         # blocks are indexed by there corrdinates e.g. (4,5), these are
         self.landed = {}
@@ -47,11 +30,6 @@ class Board( Frame ):
         self.max_x = max_x
         self.max_y = max_y
         self.offset = offset        
-
-        self.canvas = Canvas(parent,
-                             height=(max_y * scale)+offset,
-                             width= (max_x * scale)+offset)
-        self.canvas.pack()
 
     def check_for_complete_row( self, blocks ):
         """
@@ -139,33 +117,7 @@ class Board( Frame ):
                     line.append(".")
             board.append(line)
         return board
-    
-    def add_block( self, (x, y), colour):
-        """
-        Create a block by drawing it on the canvas, return
-        it's ID to the caller.
-        """
-        rx = (x * self.scale) + self.offset
-        ry = (y * self.scale) + self.offset
         
-        return self.canvas.create_rectangle(
-            rx, ry, rx+self.scale, ry+self.scale, fill=colour
-        )
-        
-    def move_block( self, id, coord):
-        """
-        Move the block, identified by 'id', by x and y. Note this is a
-        relative movement, e.g. move 10, 10 means move 10 pixels right and
-        10 pixels down NOT move to position 10,10. 
-        """
-        x, y = coord
-        self.canvas.move(id, x*self.scale, y*self.scale)
-        
-    def delete_block(self, id):
-        """
-        Delete the identified block
-        """
-        self.canvas.delete( id )
         
     def check_block( self, (x, y) ):
         """
