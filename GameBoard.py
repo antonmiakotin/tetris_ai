@@ -3,8 +3,6 @@
 Holds the UI elements for the board game
 """
 
-from Tkinter import *
-
 LEFT = "left"
 RIGHT = "right"
 DOWN = "down"
