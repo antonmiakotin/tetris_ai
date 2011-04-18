@@ -12,7 +12,6 @@ direction_d = { "left": (-1, 0), "right": (1, 0), "down": (0, 1) }
 
 class Block(object):
     def __init__( self, id, (x, y)):
-        self.id = id
         self.x = x
         self.y = y
         
@@ -40,7 +39,7 @@ class shape(object):
     def __str__(self):
         return "SHAPE"
             
-    def __init__(self, board, coords, colour ):
+    def __init__(self, board, coords):
         """
         Initialise the shape base.
         """
@@ -153,7 +152,7 @@ class shape_limited_rotate( shape ):
     Instead they toggle between 90 degrees clockwise and then back 90 degrees
     anti-clockwise.
     """
-    def __init__( self, board, coords, colour ):
+    def __init__( self, board, coords):
         self.clockwise = True
         super(shape_limited_rotate, self).__init__(board, coords)
     

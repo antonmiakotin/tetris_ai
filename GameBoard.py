@@ -14,7 +14,7 @@ class Board():
     """
     The board represents the tetris playing area. A grid of x by y blocks.
     """
-    def __init__(self, parent, scale=20, max_x=10, max_y=20, offset=3):
+    def __init__(self, scale=20, max_x=10, max_y=20, offset=3):
         """
         Init and config the tetris board, default configuration:
         Scale (block size in pixels) = 20
@@ -25,7 +25,6 @@ class Board():
         
         # blocks are indexed by there corrdinates e.g. (4,5), these are
         self.landed = {}
-        self.parent = parent
         self.scale = scale
         self.max_x = max_x
         self.max_y = max_y
