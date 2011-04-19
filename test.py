@@ -19,29 +19,33 @@ if __name__ == "__main__":
     board.landed.append((7,18))
     board.landed.append((7,17))
     
-    #run states function
-    child_states = BoardStates.BoardStates.generate_child_states(board, Shapes.square_shape)
-    #sort all boards, highest score first
-    child_states = sorted(child_states, key=lambda state: state[0], reverse = True)
+    child_boards = [board]
+    f = open("output.txt", 'w')   
 
-    child_boards = []
-    #since child_states are actually tuples of (score, state)
-    for tup in child_states:
-        #extract all boards from state
-        child_boards.append(tup[1].board)
+    for i in range(2):
+        for board in child_boards:
+            #run states function
+            child_states = BoardStates.BoardStates.generate_child_states(board, Shapes.square_shape)
+            #sort all boards, highest score first
+            child_states = sorted(child_states, key=lambda state: state[0], reverse = True)
+            #pick the top 3
+            child_states = child_states[:3]
+            f.write( "BASE STATE\n" )
+            f.write( "#"*30+"\n" )
+            f.write( str(board) )
+            f.write( "CHILD STATES\n" )
+            f.write ( "#"*30+"\n" )
+            for state in child_states:
+                f.write( str(state[1]) )
+            
+            
+            #since child_states are actually tuples of (score, state)
+            child_boards = []
+            for tup in child_states:
+                #extract all boards from state
+                child_boards.append(tup[1].board)
+
     
-    grand_child_states = []
     
-        
-    grand_child_states = BoardStates.BoardStates.generate_child_states(child_boards[0], Shapes.square_shape)
-    grand_child_states = sorted(grand_child_states, key=lambda state: state[0], reverse = True)
-    
-    
-    f = open("output.txt", 'w')
-    f.write( "BASE STATE\n" )
-    f.write( "#"*30+"\n" )
-    f.write( str(child_boards[0]) )
-    f.write( "CHILD STATES\n" )
-    f.write ( "#"*30+"\n" )
-    for state in grand_child_states:
-        f.write( str(state[1]) )
+   
+
