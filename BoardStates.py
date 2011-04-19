@@ -8,14 +8,13 @@ from Shapes import *
 import copy
 
 # Holds the proposed state and the path to get there
-class state_and_path:
-    def __init__(self, state, path):
-        self.state = state
-        self.path = path
-        #added score to state, will use with eval function
-        self.score = 0
+class State:
+    def __init__(self, board, score, parent):
+        self.board = board
+        self.score = score
+        self. parent = parent
     def __str__(self):
-        return str(self.state) + " " + str(self.path)
+        return "Board:\n" + str(self.board) + "\n" + str(self.score)
 
 
 
@@ -42,7 +41,7 @@ class BoardStates:
         
     #returns y-coordinate of bottom most block
     @staticmethod
-    def get_bottom_block(self, shape):
+    def get_bottom_block(shape):
         min_y = -1
         for block in shape.blocks:
             y_temp = block.coord()[1]
@@ -71,10 +70,10 @@ class BoardStates:
             down = (current[0], current[1]+1)
             up = (current[0], current[1]-1)
             
-            right_hit = board.landed.get(right)
-            left_hit = board.landed.get(left)
-            up_hit = board.landed.get(up)
-            down_hit = board.landed.get(down)
+            right_hit = (right in board.landed)
+            left_hit = (left in board.landed)
+            up_hit = (up in board.landed)
+            down_hit = (down in board.landed)
             
             
             if( right_hit and (right not in already_hit)):
@@ -127,36 +126,26 @@ class BoardStates:
     @staticmethod
     def generate_child_states(board, shape_type):
                 
-        #get the current state of the board
-        #list of landed coordinates
-        parent_state = []
-        for k,v in board.landed.iteritems():
-            parent_state.append(k)
-        
-        #if the piece is a square piece
-        # if piece is square_shape: 
-        child_states = []
-        child_path = []
-        #print board
-        
         child_states = []
         
+        #move piece down the column
         for x in range(board.max_x):
             score = 0
             shape = shape_type.rel_check_and_create(board, (x,0))
-
             for y in range(board.max_y):
+                print x,y
                 if shape:
-                    print shape.move("down")
-                    print shape.blocks[0].coord()
-                    if BoardStates.did_shape_land(board, shape):
-                        print "shape landed!!!!"
-                        score = eval(shape, board)
-                        print score
-                        #print board
-        
-        
-        
+                    canmove =  shape.move("down")
+                    if not canmove:
+                        print "can't move"
+                        child_board = copy.deepcopy(board)
+                        score = BoardStates.eval(shape, child_board)
+                        child_board.add_shape(shape)
+                        child_state = State(child_board, score, board)
+                        child_states.append(child_state)
+                        break
+        for state in child_states:
+            print state
         
         
         '''

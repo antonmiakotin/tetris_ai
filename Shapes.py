@@ -47,7 +47,7 @@ class shape(object):
         self.blocks = []
         
         for coord in coords:
-            block = Block(self.board.add_block( coord), coord)
+            block = Block(coord)
             
             self.blocks.append( block )
 

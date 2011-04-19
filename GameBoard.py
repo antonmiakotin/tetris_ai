@@ -24,7 +24,7 @@ class Board():
         """
         
         # blocks are indexed by there corrdinates e.g. (4,5), these are
-        self.landed = {}
+        self.landed = []
         self.scale = scale
         self.max_x = max_x
         self.max_y = max_y
@@ -47,7 +47,7 @@ class Board():
         for y in xrange(self.max_y -1, -1, -1):
             row_is_empty = True
             for x in xrange(self.max_x):
-                if self.landed.get((x,y), None):
+                if (x,y) in self.landed:
                     row_is_empty = False
                     break;
             if row_is_empty:
@@ -60,7 +60,7 @@ class Board():
  
             complete_row = True
             for x in xrange(self.max_x):
-                if self.landed.get((x,y), None) is None:
+                if not ((x,y) in self.landed):
                     complete_row = False
                     break;
 
@@ -110,13 +110,16 @@ class Board():
         for y in range(self.max_y):
             line = []
             for x in range(self.max_x):
-                if self.landed.get((x,y), None):
+                if ((x,y) in self.landed):
                     line.append("X")
                 else:
                     line.append(".")
             board.append(line)
         return board
-        
+    
+    def add_shape(self, shape):
+        for block in shape.blocks:
+            self.landed.append(block.coord())
         
     def check_block( self, (x, y) ):
         """
@@ -126,7 +129,7 @@ class Board():
         """
         if x < 0 or x >= self.max_x or y < 0 or y >= self.max_y:
             return False
-        elif self.landed.has_key( (x, y) ):
+        elif (x,y) in self.landed:
             return False
         else:
             return True
