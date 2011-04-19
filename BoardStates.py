@@ -131,27 +131,26 @@ class BoardStates:
         #move piece down the column
         for x in range(board.max_x):
             score = 0
+            #actually create a piece from the class that was passed in
             shape = shape_type.rel_check_and_create(board, (x,0))
             for y in range(board.max_y):
-                #print x,y
+                #check to see that a piece can be created at the coordinate
                 if shape:
                     canmove =  shape.move("down")
                     if not canmove:
-                        #print "can't move"
+                        #either we've hit a piece or we've hit the bottom
+                        #make a copy of the board
                         child_board = copy.deepcopy(board)
+                        #calculate the score
                         score = BoardStates.eval(shape, child_board)
+                        #add the current piece to the 'landed' array of board
                         child_board.add_shape(shape)
+                        #create a state that includes child board, the score and the parent board
                         child_state = State(child_board, score, board)
+                        #append a tuple that includes the score so we can sort
                         child_states.append((child_state.score, child_state))
                         break
-        child_states = sorted(child_states, key=lambda state: state[0], reverse = True)
-        print "BASE STATE"
-        print "#"*30
-        print board
-        print "CHILD STATES"
-        print "#"*30
-        for state in child_states:
-            print state[1]
+        return child_states
     
 
     #only works for square right now
