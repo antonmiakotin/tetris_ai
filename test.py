@@ -22,14 +22,15 @@ if __name__ == "__main__":
     child_boards = [board]
     f = open("output.txt", 'w')   
 
-    for i in range(2):
+    for i in range(5):
         for board in child_boards:
             #run states function
-            child_states = BoardStates.BoardStates.generate_child_states(board, Shapes.square_shape)
+            child_states = BoardStates.BoardStates.generate_child_states(board, Shapes.t_shape)
             #sort all boards, highest score first
             child_states = sorted(child_states, key=lambda state: state[0], reverse = True)
             #pick the top 3
             child_states = child_states[:3]
+            #output to file
             f.write( "BASE STATE\n" )
             f.write( "#"*30+"\n" )
             f.write( str(board) )
