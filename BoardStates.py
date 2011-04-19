@@ -14,7 +14,7 @@ class State:
         self.score = score
         self. parent = parent
     def __str__(self):
-        return "Board:\n" + str(self.board) + "\n" + str(self.score)
+        return "Board:\n" + str(self.board) + "\n" + "Score: " + str(self.score) + "\n"
 
 
 
@@ -60,7 +60,7 @@ class BoardStates:
         already_hit = []
         for block in shape.blocks:
             current = block.coord()
-            print "current:", current
+            #print "current:", current
             
             #create tuples of coordinates of blocks to check
             right = (current[0]+1, current[1])
@@ -77,19 +77,19 @@ class BoardStates:
             
             
             if( right_hit and (right not in already_hit)):
-                print "\tright hit", right
+                #print "\tright hit", right
                 already_hit.append(right)
                 touching_score += 1
             if ( left_hit and (left not in already_hit) ):
-                print "\tleft hit", left
+                #print "\tleft hit", left
                 already_hit.append(left)
                 touching_score += 1
             if ( up_hit and (up not in already_hit) ):
-                print "\tup hit", up
+                #print "\tup hit", up
                 already_hit.append(up)
                 touching_score += 1
             if ( down_hit and (down not in already_hit) ):
-                print "\tdown hit", down
+                #print "\tdown hit", down
                 already_hit.append(down)
                 touching_score += 1
         depth_score = BoardStates.get_bottom_block(shape)
@@ -133,40 +133,25 @@ class BoardStates:
             score = 0
             shape = shape_type.rel_check_and_create(board, (x,0))
             for y in range(board.max_y):
-                print x,y
+                #print x,y
                 if shape:
                     canmove =  shape.move("down")
                     if not canmove:
-                        print "can't move"
+                        #print "can't move"
                         child_board = copy.deepcopy(board)
                         score = BoardStates.eval(shape, child_board)
                         child_board.add_shape(shape)
                         child_state = State(child_board, score, board)
-                        child_states.append(child_state)
+                        child_states.append((child_state.score, child_state))
                         break
+        child_states = sorted(child_states, key=lambda state: state[0], reverse = True)
+        print "BASE STATE"
+        print "#"*30
+        print board
+        print "CHILD STATES"
+        print "#"*30
         for state in child_states:
-            print state
-        
-        
-        '''
-        #if it's a square!
-        if piece is square_shape:
-            for x in range(board.max_x):
-                for y in range(board.max_y):
-                    if board.check_block([x,y]) == True and board.check_block([x+1,y]) == True and board.check_block([x+1,y-1]) == True:
-                        if board.check_block([x,y+1]) == False or board.check_block([x+1,y+1]) == False:
-                            l = copy.deepcopy(parent_state)
-                            l.append((x,y))
-                            l.append((x+1,y))
-                            l.append((x,y-1))
-                            l.append((x+1,y-1))
-                            child_path = BoardStates.get_left_right_from_int(x, piece)
-                            current_state = state_and_path(l,child_path)
-                            child_states.append(current_state)
-            for s in child_states:
-                print s
-            return child_states
-        '''
+            print state[1]
     
 
     #only works for square right now

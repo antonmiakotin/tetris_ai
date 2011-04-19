@@ -3,7 +3,7 @@ import GameBoard
 import Shapes
 from random import choice
 
-class simple_controller:
+class Simple_Controller:
     
     def __init__(self):
         self.board = GameBoard.Board()

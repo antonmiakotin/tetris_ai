@@ -100,22 +100,24 @@ class Board():
     def __str__( self ):
         string = ""
         board = self.get_board_state()
-        for i in board:
-            string = string + str(i) + "\n"
-        return string
+       # for i in board:
+        #    string = string + str(i) + "\n"
+        #return string
+        return board
         
             
     def get_board_state(self):
-        board = []
+        board_state = ""
         for y in range(self.max_y):
-            line = []
+            line = ""
+            line += (str(y)+"\t")
             for x in range(self.max_x):
                 if ((x,y) in self.landed):
-                    line.append("X")
+                    line += ("|X")
                 else:
-                    line.append(".")
-            board.append(line)
-        return board
+                    line += ("|_")
+            board_state += (line+"|\n")
+        return board_state
     
     def add_shape(self, shape):
         for block in shape.blocks:
