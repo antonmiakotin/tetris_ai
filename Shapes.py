@@ -140,6 +140,12 @@ class shape(object):
                 lst.append(i_shape)
 
         return lst
+        
+    def get_coords(self):
+        coords = []
+        for block in self.blocks:
+            coords.append(block.coord())
+        return coords
 
 class shape_limited_rotate( shape ):
     """

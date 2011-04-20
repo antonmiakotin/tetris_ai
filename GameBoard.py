@@ -28,7 +28,9 @@ class Board():
         self.scale = scale
         self.max_x = max_x
         self.max_y = max_y
-        self.offset = offset        
+        self.offset = offset  
+        #last piece that was added to the landed list 
+        self.last_piece = None
 
     def check_for_complete_row( self, blocks ):
         """
@@ -108,18 +110,27 @@ class Board():
             
     def get_board_state(self):
         board_state = ""
+        last_piece_coords = []
+        if self.last_piece:
+            last_piece_coords = self.last_piece.get_coords()
+        
         for y in range(self.max_y):
             line = ""
             line += (str(y)+"\t")
             for x in range(self.max_x):
                 if ((x,y) in self.landed):
-                    line += ("|X")
+                    if ((x,y) in last_piece_coords):
+                        #mark piece that has just landed as + for dbugging
+                        line += ("|+")
+                    else:
+                        line += ("|X")
                 else:
                     line += ("|_")
             board_state += (line+"|\n")
         return board_state
     
     def add_shape(self, shape):
+        self.last_piece = shape
         for block in shape.blocks:
             self.landed.append(block.coord())
         

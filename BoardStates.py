@@ -4,17 +4,19 @@
 
 from GameBoard import *
 from types import *
-from Shapes import *
+import Shapes
 import copy
 
 # Holds the proposed state and the path to get there
 class State:
-    def __init__(self, board, score, parent):
+    def __init__(self,id, board, score, parent):
+        #id is a tuple of (row in tree, index from left)
+        self.id = id
         self.board = board
         self.score = score
         self. parent = parent
     def __str__(self):
-        return "Board:\n" + str(self.board) + "\n" + "Score: " + str(self.score) + "\n"
+        return "Board:\n" + "ID: " + str(self.id) + "\n" + str(self.board) + "\n" + "Score: " + str(self.score) + "\n"
 
 
 
@@ -102,74 +104,60 @@ class BoardStates:
         return  depth_score + touching_score
 
 
-    #we probably don't need this method, don't toss yet
-    @staticmethod
-    def get_width_height(shape):
-        min_x = 11
-        max_x = -1
-        min_y = 22
-        max_y = -1
-        for block in shape.blocks:
-            x = block.coord()[0]
-            y = block.coord()[1]
-            if x < min_x:
-                min_x = x
-            if x > max_x:
-                max_x = x
-            if y < min_y:
-                min_y = y
-            if y > max_y:
-                max_y = y
-        return (max_x - min_x + 1, max_y - min_y +1)
-    
     
     @staticmethod
-    def generate_child_states(board, shape_type):
-                
+    def generate_child_states(state, shape_type):
+        state.id = (state.id[0]+1, state.id[1])
+        board = state.board
+        print shape_type
         child_states = []
+        num_rotate = 1
+        if shape_type == Shapes.t_shape:
+            num_rotate = 4
+        elif shape_type == Shapes.z_shape or shape_type == Shapes.s_shape:
+            num_rotate = 2
+        elif shape_type == Shapes.l_shape or shape_type == Shapes.reverse_l_shape:
+            num_rotate = 4
+        elif shape_type == Shapes.i_shape:
+            num_rotate = 2
+        print str(num_rotate)
         
-        #move piece down the column
-        for x in range(board.max_x):
-            score = 0
-            #actually create a piece from the class that was passed in
-            shape = shape_type.rel_check_and_create(board, (x,0))
-            for y in range(board.max_y):
-                #check to see that a piece can be created at the coordinate
+        id = 1
+        for i in range(num_rotate):
+            #move piece down the column
+            for x in range(board.max_x):
+                score = 0
+                #actually create a piece from the class that was passed in
+                shape = shape_type.rel_check_and_create(board, (x,2))
+                #rotate shape to needed orientation
                 if shape:
-                    canmove =  shape.move("down")
-                    if not canmove:
-                        #either we've hit a piece or we've hit the bottom
-                        #make a copy of the board
-                        child_board = copy.deepcopy(board)
-                        #calculate the score
-                        score = BoardStates.eval(shape, child_board)
-                        #add the current piece to the 'landed' array of board
-                        child_board.add_shape(shape)
-                        #create a state that includes child board, the score and the parent board
-                        child_state = State(child_board, score, board)
-                        #append a tuple that includes the score so we can sort
-                        child_states.append((child_state.score, child_state))
-                        break
+                    for j in range(i):
+                        print "rotating clockwise"
+                        shape.rotate()
+                        for block in shape.blocks:
+                            print block.coord()
+                for y in range(2,board.max_y):
+                    
+                    #check to see that a piece can be created at the coordinate
+                    if shape:
+                        canmove =  shape.move("down")
+                        if not canmove:
+                            #either we've hit a piece or we've hit the bottom
+                            #make a copy of the board
+                            child_board = copy.deepcopy(board)
+                            #calculate the score
+                            score = BoardStates.eval(shape, child_board)
+                            #add the current piece to the 'landed' array of board
+                            child_board.add_shape(shape)
+                            #create a state that includes child board, the score and the parent board
+                            
+                            #create child id
+                            child_id = (state.id[0], id)
+                            #increment id
+                            id += 1
+                            child_state = State(child_id, child_board, score, board)
+                            #append a tuple that includes the score so we can sort
+                            child_states.append((child_state.score, child_state))
+                            break
         return child_states
     
-
-    #only works for square right now
-    @staticmethod
-    def get_left_right_from_int(i, piece):
-        l = []
-        if piece is square_shape:
-            if i < 4:
-                for i in range (4 - i):
-                    l.append("<Left>")
-            elif i > 4:
-                for i in range ( i-4 ):
-                    l.append("<Right>")
-        return l
-
-                    #add to state list
-        #evaluate all the possible places it could land
-        #add them to the state list
-        #return the state list
-
-        #if piece is ...
-

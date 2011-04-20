@@ -2,7 +2,7 @@ import SimpleController
 import GameBoard
 import BoardStates
 import Shapes
-
+from random import choice
 if __name__ == "__main__":
     #for now controller doesn't do anything
     #do all work manually
@@ -19,32 +19,41 @@ if __name__ == "__main__":
     board.landed.append((7,18))
     board.landed.append((7,17))
     
-    child_boards = [board]
     f = open("output.txt", 'w')   
 
-    for i in range(5):
-        for board in child_boards:
+    shape_classes = [Shapes.square_shape, Shapes.t_shape, Shapes.l_shape, Shapes.reverse_l_shape, Shapes.i_shape]
+    random_pieces = []
+    #pic random pieces
+    for i in range(2):
+        cls = choice(shape_classes)
+        random_pieces.append(cls)
+    id = (0,0)
+    init_state = BoardStates.State(id, board, 0, None)
+    child_states = [init_state]
+    
+    
+    for piece in random_pieces:
+        
+        for i in range(len(child_states)):
+            #need to remove root nodes from board list
+            state = child_states.pop(i)
             #run states function
-            child_states = BoardStates.BoardStates.generate_child_states(board, Shapes.t_shape)
+            result_tuples = BoardStates.BoardStates.generate_child_states(state, piece)
+            
             #sort all boards, highest score first
-            child_states = sorted(child_states, key=lambda state: state[0], reverse = True)
+            result_tuples = sorted(result_tuples, key=lambda state: state[0], reverse = True)
             #pick the top 3
-            child_states = child_states[:3]
+            result_tuples = result_tuples[:5]
             #output to file
             f.write( "BASE STATE\n" )
             f.write( "#"*30+"\n" )
-            f.write( str(board) )
+            f.write( str(state) )
             f.write( "CHILD STATES\n" )
             f.write ( "#"*30+"\n" )
-            for state in child_states:
-                f.write( str(state[1]) )
+            for tup in result_tuples:
+                f.write( str(tup[1]) )
+                child_states.append(tup[1])
             
-            
-            #since child_states are actually tuples of (score, state)
-            child_boards = []
-            for tup in child_states:
-                #extract all boards from state
-                child_boards.append(tup[1].board)
 
     
     
