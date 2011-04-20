@@ -127,14 +127,14 @@ class BoardStates:
         
         
         #move back tomorrow
-        shape = shape_type.rel_check_and_create(board, (0,3))
+        
         for i in range(num_rotate):
             #move piece down the column
             for x in range(board.max_x):
                 score = 0
                 #actually create a piece from the class that was passed in
                 #starting at y=3, otherwise pieces don't have room to rotate
-                 
+                shape = shape_type.rel_check_and_create(board, (x,3))
                 #rotate shape to needed orientation
                 if shape:
                     for j in range(i):
