@@ -54,7 +54,8 @@ class BoardStates:
     #assigns value to the block's placement
     @staticmethod
     def eval(shape, board):
-        # +1 for every touching square, + y-coordinate 
+        # +1 for every touching square, + y-coordinate
+        #bottom and sides count
         total_score = 0
         touching_score = 0
         depth_score = 0
@@ -72,10 +73,10 @@ class BoardStates:
             down = (current[0], current[1]+1)
             up = (current[0], current[1]-1)
             
-            right_hit = (right in board.landed)
-            left_hit = (left in board.landed)
+            right_hit = ((right in board.landed) or (right[0] > board.max_x))
+            left_hit = ((left in board.landed) or (left[0] < 0))
             up_hit = (up in board.landed)
-            down_hit = (down in board.landed)
+            down_hit = ((down in board.landed) or (down[1] > board.max_y))
             
             
             if( right_hit and (right not in already_hit)):
@@ -123,21 +124,25 @@ class BoardStates:
         print str(num_rotate)
         
         id = 1
+        
+        
+        #move back tomorrow
+        shape = shape_type.rel_check_and_create(board, (0,3))
         for i in range(num_rotate):
             #move piece down the column
             for x in range(board.max_x):
                 score = 0
                 #actually create a piece from the class that was passed in
-                shape = shape_type.rel_check_and_create(board, (x,2))
+                #starting at y=3, otherwise pieces don't have room to rotate
+                 
                 #rotate shape to needed orientation
                 if shape:
                     for j in range(i):
                         print "rotating clockwise"
                         shape.rotate()
-                        for block in shape.blocks:
-                            print block.coord()
-                for y in range(2,board.max_y):
-                    
+    
+                for y in range(3,board.max_y):
+
                     #check to see that a piece can be created at the coordinate
                     if shape:
                         canmove =  shape.move("down")
@@ -158,6 +163,8 @@ class BoardStates:
                             child_state = State(child_id, child_board, score, board)
                             #append a tuple that includes the score so we can sort
                             child_states.append((child_state.score, child_state))
+                            print "stopped at: ", x,y
+                            print "return state: ", child_id
                             break
         return child_states
     
