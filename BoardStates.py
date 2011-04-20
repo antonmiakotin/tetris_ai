@@ -125,22 +125,38 @@ class BoardStates:
         
         id = 1
         
-        
+
+
         #move back tomorrow
-        
         for i in range(num_rotate):
+
+            # This is a total hack, but works
+            can_move_right = True
+
             #move piece down the column
             for x in range(board.max_x):
+
+                if not can_move_right:
+                    # stop evaluating
+                    # you are about to repeat yourself
+                    break
+
                 score = 0
                 #actually create a piece from the class that was passed in
                 #starting at y=3, otherwise pieces don't have room to rotate
-                shape = shape_type.rel_check_and_create(board, (x,3))
+                shape = shape_type.rel_check_and_create(board, (0,3))
+
                 #rotate shape to needed orientation
                 if shape:
                     for j in range(i):
                         print "rotating clockwise"
                         shape.rotate()
     
+                # Need to rotate the shape before moving it
+                for z in range(x):
+                    # keep track of this to pull us out of loop 
+                    can_move_right = shape.move("right")
+
                 for y in range(3,board.max_y):
 
                     #check to see that a piece can be created at the coordinate
@@ -150,17 +166,21 @@ class BoardStates:
                             #either we've hit a piece or we've hit the bottom
                             #make a copy of the board
                             child_board = copy.deepcopy(board)
+
                             #calculate the score
                             score = BoardStates.eval(shape, child_board)
+
                             #add the current piece to the 'landed' array of board
                             child_board.add_shape(shape)
+
                             #create a state that includes child board, the score and the parent board
-                            
                             #create child id
                             child_id = (state.id[0], id)
+
                             #increment id
                             id += 1
                             child_state = State(child_id, child_board, score, board)
+
                             #append a tuple that includes the score so we can sort
                             child_states.append((child_state.score, child_state))
                             print "stopped at: ", x,y

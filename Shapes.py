@@ -147,11 +147,6 @@ class shape(object):
             coords.append(block.coord())
         return coords
         
-    def move_to(self, (x,y)):
-        for block in self.blocks:
-            
-            
-
 class shape_limited_rotate( shape ):
     """
     This is a base class for the shapes like the S, Z and I that don't fully
