@@ -30,7 +30,10 @@ if __name__ == "__main__":
     id = (0,0)
     init_state = BoardStates.State(id, board, 0, None)
     child_states = [init_state]
+<<<<<<< HEAD
     #random_pieces = [Shapes.i_shape]
+=======
+>>>>>>> dd391204f78b844d91d84ea441caf2210668e5a5
     
     for piece in random_pieces:
         
@@ -43,7 +46,11 @@ if __name__ == "__main__":
             #sort all boards, highest score first
             result_tuples = sorted(result_tuples, key=lambda state: state[0], reverse = True)
             #pick the top 3
+<<<<<<< HEAD
             result_tuples = result_tuples[:2]
+=======
+            result_tuples = result_tuples[:30]
+>>>>>>> dd391204f78b844d91d84ea441caf2210668e5a5
             #output to file
             f.write( "BASE STATE\n" )
             f.write( "#"*30+"\n" )
