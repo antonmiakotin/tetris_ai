@@ -2,6 +2,8 @@ import GameBoard
 import BoardStates
 import Shapes
 import AggressiveSearch
+import sys
+
 from random import choice
 if __name__ == "__main__":
     #create game board, fill with some squares to test eval
@@ -34,8 +36,8 @@ if __name__ == "__main__":
                     break
             AggressiveSearch.run(board, sys.arg[2], threshold) 
 
-        else:
-            print "Usage -[LP] [filename].tgame"
+    else:
+        print "Usage -[LP] [filename].tgame"
 
 
     # This shoudl all be moved to LocalSearch.py or something like that

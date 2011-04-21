@@ -8,8 +8,8 @@
 # Method runs the algorithm
 @staticmethod
 def run(board, state_list, threshold):
+    pass
     # for list of pieces
-    for state in state_list
     # first grab the first set of states given the parent state
     # order them by points
     # if under the threshold
