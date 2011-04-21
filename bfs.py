@@ -3,6 +3,7 @@ import BoardStates
 import Shapes
 from random import choice
 
+@staticmethod
 def run(myBoard, myShapes):
 	print 'Running from BFS.py...'
 	return 0
