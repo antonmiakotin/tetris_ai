@@ -7,6 +7,8 @@ from types import *
 import Shapes
 import copy
 
+
+# Need how many rows that have been destroyed in this state (0-4)
 # Holds the proposed state and the path to get there
 class State:
     def __init__(self,id, board, score, parent):
