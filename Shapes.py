@@ -146,11 +146,7 @@ class shape(object):
         for block in self.blocks:
             coords.append(block.coord())
         return coords
-        
-    def move_to(self, (x,y)):
-        for block in self.blocks:
-            
-            
+
 
 class shape_limited_rotate( shape ):
     """
