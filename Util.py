@@ -134,24 +134,33 @@ class Util:
                 #starting at y=3, otherwise pieces don't have room to rotate
                 shape = shape_type.rel_check_and_create(board, (0,3))
                 
-                '''
-                good god this is ugly.  we need a way of checking one square
-                ahead of the piece that we're moving.  instead of creating an 
-                elegant function like you're supposed to, i've made another piece
-                that we're rotating and moving along with our proper piece.
-                if this second shape can't be moved any more to the right, we're done
-                gross...
-                '''
-                shape_ahead = shape_type.rel_check_and_create(board, (1,3))
+
+                
 
                 #rotate shape to needed orientation
                 if shape:
+                     # Need to rotate the shape before moving it
                     for j in range(i):
                         #print "rotating clockwise"
                         did_rotate = shape.rotate()
                         did_ahead_rotate = shape_ahead.rotate()
                         print "rotating: ", str(did_rotate)
-                    # Need to rotate the shape before moving it
+                    
+                    '''
+                    good god this is ugly.  we need a way of checking one square
+                    ahead of the piece that we're moving.  instead of creating an 
+                    elegant function like you're supposed to, i've made another piece
+                    that we're rotating and moving along with our proper piece.
+                    if this second shape can't be moved any more to the right, we're done
+                    gross...
+                    '''
+                    
+                    
+                    #more hack for reverse_l and l shapes
+                    shape.move("left")
+                    shape_ahead = copy.deepcopy(shape)
+                    shape_ahead.move("right")
+                    
                     for z in range(x):
                         # keep track of this to pull us out of loop 
                         
@@ -189,9 +198,10 @@ class Util:
                             #print "return state: ", child_id
                             
                             print child_board
-                            #print x,y
-                            #print str(can_move_right)
-                            #print
+                            print x,y
+                            print str(can_move_right)
+                            print str(can_move_right_plus_one)
+                            print
                             
                             break
         return child_states
