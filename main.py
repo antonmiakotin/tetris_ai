@@ -1,5 +1,5 @@
 import GameBoard
-import BoardStates
+import Util
 from Shapes import *
 from  AggressiveSearch import *
 import sys
@@ -12,7 +12,12 @@ if __name__ == "__main__":
     #throw some more random blocks
     board.landed.append((3,18))
     board.landed.append((2,18))
+    board.landed.append((4,18))
+    board.landed.append((5,18))
+    board.landed.append((6,18))
     board.landed.append((7,18))
+    board.landed.append((8,18))
+    board.landed.append((9,18))
     board.landed.append((7,17))
     
 #    f = open("output.txt", 'w')   
