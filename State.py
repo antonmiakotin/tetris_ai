@@ -12,6 +12,6 @@ class State:
         self.id = id
         self.board = board
         self.score = score
-        self. parent = parent
+        self.parent = parent
     def __str__(self):
         return "Board:\n" + "ID: " + str(self.id) + "\n" + str(self.board) + "\n" + "Score: " + str(self.score) + "\n"
