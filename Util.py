@@ -6,23 +6,9 @@ from GameBoard import *
 from types import *
 import Shapes
 import copy
+import State
 
-
-# Need how many rows that have been destroyed in this state (0-4)
-# Holds the proposed state and the path to get there
-class State:
-    def __init__(self,id, board, score, parent):
-        #id is a tuple of (row in tree, index from left)
-        self.id = id
-        self.board = board
-        self.score = score
-        self. parent = parent
-    def __str__(self):
-        return "Board:\n" + "ID: " + str(self.id) + "\n" + str(self.board) + "\n" + "Score: " + str(self.score) + "\n"
-
-
-
-class BoardStates:
+class Util:
     
     @staticmethod
     def did_shape_land(board, shape):
@@ -97,7 +83,7 @@ class BoardStates:
                 #print "\tdown hit", down
                 already_hit.append(down)
                 touching_score += 1
-        depth_score = BoardStates.get_bottom_block(shape)
+        depth_score = Util.get_bottom_block(shape)
         '''
         print "\tTouching: ", touching_score
         print "\tDepth: ", depth_score
@@ -170,7 +156,7 @@ class BoardStates:
                             child_board = copy.deepcopy(board)
 
                             #calculate the score
-                            score = BoardStates.eval(shape, child_board)
+                            score = Util.eval(shape, child_board)
 
                             #add the current piece to the 'landed' array of board
                             child_board.add_shape(shape)
@@ -181,7 +167,7 @@ class BoardStates:
 
                             #increment id
                             id += 1
-                            child_state = State(child_id, child_board, score, board)
+                            child_state = State.State(child_id, child_board, score, board)
 
                             #append a tuple that includes the score so we can sort
                             child_states.append((child_state.score, child_state))

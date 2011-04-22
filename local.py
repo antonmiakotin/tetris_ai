@@ -1,8 +1,10 @@
-import SimpleController
 import GameBoard
-import BoardStates
+import Util
 import Shapes
 from random import choice
+import State
+
+
 if __name__ == "__main__":
     #for now controller doesn't do anything
     #do all work manually
@@ -28,7 +30,7 @@ if __name__ == "__main__":
         cls = choice(shape_classes)
         random_pieces.append(cls)
     id = (0,0)
-    init_state = BoardStates.State(id, board, 0, None)
+    init_state = State.State(id, board, 0, None)
     child_states = [init_state]
     #random_pieces = [Shapes.i_shape]
 
@@ -38,7 +40,7 @@ if __name__ == "__main__":
             #need to remove root nodes from board list
             state = child_states.pop(i)
             #run states function
-            result_tuples = BoardStates.BoardStates.generate_child_states(state, piece)
+            result_tuples = Util.Util.generate_child_states(state, piece)
             
             #sort all boards, highest score first
             result_tuples = sorted(result_tuples, key=lambda state: state[0], reverse = True)
@@ -54,9 +56,3 @@ if __name__ == "__main__":
             for tup in result_tuples:
                 f.write( str(tup[1]) )
                 child_states.append(tup[1])
-            
-
-    
-    
-   
-
