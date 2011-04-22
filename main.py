@@ -22,7 +22,7 @@ if __name__ == "__main__":
     
 #    f = open("output.txt", 'w')   
 
-    init_state = State(id, board, 0, None)
+    init_state = State.State(id, board, 0, None)
     child_states = [init_state]
     
     #run the game in file input mode
