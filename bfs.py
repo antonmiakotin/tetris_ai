@@ -4,10 +4,6 @@ import Shapes
 from random import choice
 import State
 
-'''
-class State:
-    def __init__(self,id, board, score, parent, game_score = 0, lines_killed = 0):
-'''
 @staticmethod
 def run(myBoard, myShapes):
 	print 'Running from BFS.py...'
@@ -47,7 +43,7 @@ def getHighestScoringStates(list_of_states):
 		if temp_state.game_score > highest_score:
 			highest_score = temp_state.game_score
 	for temp_state in list_of_states:
-		if temp_state.game_score = highest_score:
+		if temp_state.game_score == highest_score:
 			return_list.append(temp_state)
 	return return_list
 
