@@ -1,63 +1,49 @@
 import GameBoard
-import BoardStates
+import Util
 import Shapes
 from random import choice
+import State
 
 @staticmethod
 def run(myBoard, myShapes):
 	print 'Running from BFS.py...'
-	return 0
+	
+	finished = False
+	root_state = State((0,0), myBoard, 0, None)
+	state_queue = [ root_state ]
+	shape_queue = copy.deepcopy(myShapes)
+		
+	while(len(shape_queue) > 0):
+		# Use the same shape to generate child states for all current states in the queue
+		for i in range(len(state_queue)):
+			child_states = getSortedChildStates( state_queue[0], shape_queue[0] )
+			state_queue.remove(state_queue[0])
+			# need to prune some child states tp reduce the state space
+			# CODE HERE
+			state_queue.extend(child_states)
+		shape_queue.remove(shape_queue[0])
+	
+	# Get the best final states (highest game scores)
+	best_states = getHighestScoringStates(state_queue)
+		
+	return best_states[0]
 
-'''
-if __name__ == "__main__":
-    #for now controller doesn't do anything
-    #do all work manually
-    
-    #create game board, fill with some squares to test eval
-    board = GameBoard.Board()
-    
-    #fill in the bottom row
-    for x in range (20):
-        board.landed.append((x,19))
-    #throw some more random blocks
-    board.landed.append((3,18))
-    board.landed.append((2,18))
-    board.landed.append((7,18))
-    board.landed.append((7,17))
-    
-    f = open("output.txt", 'w')   
+@staticmethod
+def getSortedChildStates(myCurrentState, shape):
+	result_tuples = Util.Util.generate_child_states(myCurrentState, shape)
+	child_states = sorted(result_tuples, key=lambda myCurrentState: myCurrentState[0], reverse = True)
+	return child_states
 
-    shape_classes = [Shapes.square_shape, Shapes.t_shape, Shapes.l_shape, Shapes.reverse_l_shape, Shapes.i_shape]
-    random_pieces = []
-    #pic random pieces
-    for i in range(2):
-        cls = choice(shape_classes)
-        random_pieces.append(cls)
-    id = (0,0)
-    init_state = BoardStates.State(id, board, 0, None)
-    child_states = [init_state]
-    random_pieces = [Shapes.i_shape]
-    
-    for piece in random_pieces:
-        
-        for i in range(len(child_states)):
-            #need to remove root nodes from board list
-            state = child_states.pop(i)
-            #run states function
-            result_tuples = BoardStates.BoardStates.generate_child_states(state, piece)
-            
-            #sort all boards, highest score first
-            #result_tuples = sorted(result_tuples, key=lambda state: state[0], reverse = True)
-            #pick the top 3
-            #result_tuples = result_tuples[:30]
-            #output to file
-            f.write( "BASE STATE\n" )
-            f.write( "#"*30+"\n" )
-            f.write( str(state) )
-            f.write( "CHILD STATES\n" )
-            f.write ( "#"*30+"\n" )
-            for tup in result_tuples:
-                f.write( str(tup[1]) )
-                child_states.append(tup[1])
-            
-'''
+# Returns a list of states with the highest game scores
+@staticmethod
+def getHighestScoringStates(list_of_states):
+	return_list = []
+	highest_score = 0
+	for temp_state in list_of_states:
+		if temp_state.game_score > highest_score:
+			highest_score = temp_state.game_score
+	for temp_state in list_of_states:
+		if temp_state.game_score == highest_score:
+			return_list.append(temp_state)
+	return return_list
+

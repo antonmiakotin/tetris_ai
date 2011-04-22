@@ -14,8 +14,8 @@ class AggressiveSearch:
         
             # first grab the first set of states given the parent state
             id = (0,0)
-            init_state = State(id, board, 0, None)
-            state_tuples = BoardStates.generate_child_states(init_state, piece)
+            init_state = State.State(id, board, 0, None)
+            state_tuples = Util.generate_child_states(init_state, piece)
             # sort the states based on score
             state_tuples = sorted(state_tuples, key=lambda state: state[0], reverse = True)
 
