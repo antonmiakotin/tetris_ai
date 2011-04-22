@@ -120,31 +120,45 @@ class Util:
 
             # This is a total hack, but works
             can_move_right = True
-
+            can_move_right_plus_one = True
+            
             #move piece down the column
             for x in range(board.max_x):
-
                 score = 0
+                if not can_move_right_plus_one:
+                    # stop evaluating
+                    # you are about to repeat yourself
+                    break
+                
                 #actually create a piece from the class that was passed in
                 #starting at y=3, otherwise pieces don't have room to rotate
                 shape = shape_type.rel_check_and_create(board, (0,3))
+                
+                '''
+                good god this is ugly.  we need a way of checking one square
+                ahead of the piece that we're moving.  instead of creating an 
+                elegant function like you're supposed to, i've made another piece
+                that we're rotating and moving along with our proper piece.
+                if this second shape can't be moved any more to the right, we're done
+                gross...
+                '''
+                shape_ahead = shape_type.rel_check_and_create(board, (1,3))
 
                 #rotate shape to needed orientation
                 if shape:
                     for j in range(i):
-                        print "rotating clockwise"
-                        shape.rotate()
-    
-                # Need to rotate the shape before moving it
-                for z in range(x-1):
-                    # keep track of this to pull us out of loop 
-                    
-                    can_move_right = shape.move("right")
-                    print "moved right: ", str(can_move_right), "x = ", x
-                    if not can_move_right:
-                        # stop evaluating
-                        # you are about to repeat yourself
-                        break
+                        #print "rotating clockwise"
+                        did_rotate = shape.rotate()
+                        did_ahead_rotate = shape_ahead.rotate()
+                        print "rotating: ", str(did_rotate)
+                    # Need to rotate the shape before moving it
+                    for z in range(x):
+                        # keep track of this to pull us out of loop 
+                        
+                        can_move_right = shape.move("right")
+                        can_move_right_plus_one = shape_ahead.move("right")
+
+                
                 for y in range(3,board.max_y):
 
                     #check to see that a piece can be created at the coordinate
@@ -171,8 +185,14 @@ class Util:
 
                             #append a tuple that includes the score so we can sort
                             child_states.append((child_state.score, child_state))
-                            print "stopped at: ", x,y
-                            print "return state: ", child_id
+                            #print "stopped at: ", x,y
+                            #print "return state: ", child_id
+                            
+                            print child_board
+                            #print x,y
+                            #print str(can_move_right)
+                            #print
+                            
                             break
         return child_states
     

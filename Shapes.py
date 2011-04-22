@@ -205,8 +205,8 @@ class t_shape( shape ):
     #creates shape from given coordinate, relative to top left corner
     @classmethod
     def rel_check_and_create( cls, board, coord ):
-        c1 = (coord[0],coord[1])
-        c2 = (coord[0]+1, coord[1])
+        c1 = (coord[0]+1,coord[1])
+        c2 = (coord[0], coord[1])
         c3 = (coord[0]+2, coord[1])
         c4 = (coord[0]+1, coord[1]+1)
         coords = [c1,c2,c3,c4]
@@ -224,9 +224,9 @@ class l_shape( shape ):
     #creates shape from given coordinate, relative to top left corner
     @classmethod
     def rel_check_and_create( cls, board, coord ):
-        c1 = (coord[0],coord[1])
-        c2 = (coord[0]+1, coord[1])
-        c3 = (coord[0]+2, coord[1])
+        c1 = (coord[0]+1,coord[1]+1)
+        c2 = (coord[0], coord[1])
+        c3 = (coord[0]+2, coord[1]+1)
         c4 = (coord[0], coord[1]+1)
         coords = [c1,c2,c3,c4]
         return super(l_shape, cls).check_and_create(board, coords)
@@ -244,8 +244,8 @@ class reverse_l_shape( shape ):
     #creates shape from given coordinate, relative to top left corner
     @classmethod
     def rel_check_and_create( cls, board, coord ):
-        c1 = (coord[0],coord[1])
-        c2 = (coord[0]+1, coord[1])
+        c1 = (coord[0]+1,coord[1]+1)
+        c2 = (coord[0], coord[1]+1)
         c3 = (coord[0]+2, coord[1])
         c4 = (coord[0]+2, coord[1]+1)
         coords = [c1,c2,c3,c4]
@@ -263,8 +263,8 @@ class z_shape( shape_limited_rotate ):
     #creates shape from given coordinate, relative to top left corner
     @classmethod
     def rel_check_and_create( cls, board, coord ):
-        c1 = (coord[0],coord[1])
-        c2 = (coord[0]+1, coord[1])
+        c1 = (coord[0]+1,coord[1])
+        c2 = (coord[0], coord[1])
         c3 = (coord[0]+1, coord[1]+1)
         c4 = (coord[0]+2, coord[1]+1)
         coords = [c1,c2,c3,c4]
@@ -282,10 +282,10 @@ class s_shape( shape_limited_rotate ):
     #creates shape from given coordinate, relative to top left corner
     @classmethod
     def rel_check_and_create( cls, board, coord ):
-        c1 = (coord[0]+1,coord[1])
-        c2 = (coord[0]+2, coord[1])
-        c3 = (coord[0], coord[1]+1)
-        c4 = (coord[0]+1, coord[1]+1)
+        c1 = (coord[0]+1,coord[1]+1)
+        c2 = (coord[0], coord[1]+1)
+        c3 = (coord[0]+1, coord[1])
+        c4 = (coord[0]+2, coord[1])
         coords = [c1,c2,c3,c4]
         return super(s_shape, cls).check_and_create(board, coords)
         
@@ -302,8 +302,8 @@ class i_shape( shape_limited_rotate ):
     #creates shape from given coordinate, relative to top left corner
     @classmethod
     def rel_check_and_create( cls, board, coord ):
-        c1 = (coord[0],coord[1])
-        c2 = (coord[0]+1, coord[1])
+        c1 = (coord[0]+1,coord[1])
+        c2 = (coord[0], coord[1])
         c3 = (coord[0]+2, coord[1])
         c4 = (coord[0]+3, coord[1])
         coords = [c1,c2,c3,c4]

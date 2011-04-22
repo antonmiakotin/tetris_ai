@@ -32,7 +32,7 @@ if __name__ == "__main__":
     id = (0,0)
     init_state = State.State(id, board, 0, None)
     child_states = [init_state]
-    random_pieces = [Shapes.square_shape]
+    random_pieces = [Shapes.l_shape]
 
     for piece in random_pieces:
         
