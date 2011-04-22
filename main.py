@@ -2,6 +2,7 @@ import GameBoard
 import Util
 from Shapes import *
 from  AggressiveSearch import *
+import bfs
 import sys
 
 from random import choice
@@ -35,11 +36,17 @@ if __name__ == "__main__":
         elif "-A" in sys.argv:
             fptr = open(sys.argv[2], 'r')
             lines = fptr.readlines()
+            fptr.close()
             pieces = shape.list_from_str_list(lines)
             AggressiveSearch.run(board, pieces, 0) # currently 0 threshold
-
+        elif ("-B" in sys.argv) or ("-b" in sys.argv):
+            fptr = open(sys.argv[2], 'r')
+            lines = fptr.readlines()
+            fptr.close()
+            pieces = shape.list_from_str_list(lines)
+            bfs.run(board, pieces)
     else:
-        print "Usage -[LA] [filename].tgame"
+        print "Usage -[LAB] [filename].tgame"
 
 
     # This shoudl all be moved to LocalSearch.py or something like that
