@@ -1,7 +1,7 @@
 import GameBoard
 import BoardStates
-import Shapes
-import AggressiveSearch
+from Shapes import *
+from  AggressiveSearch import *
 import sys
 
 from random import choice
@@ -17,7 +17,7 @@ if __name__ == "__main__":
     
 #    f = open("output.txt", 'w')   
 
-    init_state = BoardStates.State(id, board, 0, None)
+    init_state = State(id, board, 0, None)
     child_states = [init_state]
     
     #run the game in file input mode
@@ -27,17 +27,14 @@ if __name__ == "__main__":
 
             # pass in the board and the file name
             LocalSerach.run(board, sys.argv[2])
-        elif "-P" in sys.argv:
-            i = 0
-            for a in sys.argv:
-                i = i + 1
-                if(a == "-t"):
-                    threshold = a + 1
-                    break
-            AggressiveSearch.run(board, sys.arg[2], threshold) 
+        elif "-A" in sys.argv:
+            fptr = open(sys.argv[2], 'r')
+            lines = fptr.readlines()
+            pieces = shape.list_from_str_list(lines)
+            AggressiveSearch.run(board, pieces, 0) # currently 0 threshold
 
     else:
-        print "Usage -[LP] [filename].tgame"
+        print "Usage -[LA] [filename].tgame"
 
 
     # This shoudl all be moved to LocalSearch.py or something like that
