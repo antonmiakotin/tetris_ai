@@ -27,15 +27,16 @@ class AggressiveSearch:
                 # if under the threshold
                 if under_threshold(threshold, state_tuple[1].board.landed):
                     # remove the ones where less than 4 lines have been created
-                    if state_tuple[1].lines_killed < 4 and state_tuple[1].lines_killed != 0:
-                        print "removing " + str(state_tuple[1])
-                        pruned_states.append(state_tuple)
+                    if state_tuple[1].lines_killed < 4:
+                        if state_tuple[1].lines_killed != 0:
+                            pruned_states.append(state_tuple)
 
             # else place the ones where a line has been created to the front
                 else:
                     if state_tuple[1].lines_killed > 0:
-                        # put it in at the front of the list
-                        tmp = state_tuples.pop[state_tuples.index(state_tuple)]
+                        # choose this state
+                        tmp = state_tuple
+                        state_tuples.remove(state_tuple)
                         state_tuples.insert(0,tmp)
 
             #yikes we removed everything! undo undo!
@@ -52,9 +53,7 @@ class AggressiveSearch:
             if len(state_tuples) != 1:
                 state_tuples = state_tuples[:1]
 
-            print "stuff"
-            for tup in state_tuples:
-                print str(tup[1])
+            print str(state_tuples[0][1])
 
             # make this the choice state. 
             init_state = State.State(id, state_tuples.pop()[1].board, 0, None)

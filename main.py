@@ -11,15 +11,15 @@ if __name__ == "__main__":
     board = GameBoard.Board()
     
     #throw some more random blocks
-    board.landed.append((3,18))
-    board.landed.append((2,18))
-    board.landed.append((4,18))
-    board.landed.append((5,18))
-    board.landed.append((6,18))
-    board.landed.append((7,18))
-    board.landed.append((8,18))
-    board.landed.append((9,18))
-    board.landed.append((7,17))
+    # board.landed.append((3,18))
+    # board.landed.append((2,18))
+    # board.landed.append((4,18))
+    # board.landed.append((5,18))
+    # board.landed.append((6,18))
+    # board.landed.append((7,18))
+    # board.landed.append((8,18))
+    # board.landed.append((9,18))
+    # board.landed.append((7,17))
     
 #    f = open("output.txt", 'w')   
 
@@ -38,7 +38,7 @@ if __name__ == "__main__":
             lines = fptr.readlines()
             fptr.close()
             pieces = shape.list_from_str_list(lines)
-            AggressiveSearch.run(board, pieces, 0) # currently 0 threshold
+            AggressiveSearch.run(board, pieces, 15) # currently 0 threshold
 
         elif ("-B" in sys.argv) or ("-b" in sys.argv):
             fptr = open(sys.argv[2], 'r')

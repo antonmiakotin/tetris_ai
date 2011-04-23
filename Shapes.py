@@ -211,7 +211,7 @@ class t_shape( shape ):
         c4 = (coord[0]+1, coord[1]+1)
         coords = [c1,c2,c3,c4]
         return super(t_shape, cls).check_and_create(board, coords)
-        
+
     def __str__(self):
         return "t_shape"
 
@@ -230,7 +230,7 @@ class l_shape( shape ):
         c4 = (coord[0], coord[1]+1)
         coords = [c1,c2,c3,c4]
         return super(l_shape, cls).check_and_create(board, coords)
-        
+
     def __str__(self):
         return "l_shape"
 
