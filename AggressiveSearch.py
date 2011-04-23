@@ -5,7 +5,7 @@
 # Stephen Kalpin
 from  Util import *
 
-debug = True
+debug = False
 
 
 # Method runs the algorithm
