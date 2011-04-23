@@ -101,7 +101,7 @@ class Util:
     def generate_child_states(state, shape_type):
         state.id = (state.id[0]+1, state.id[1])
         board = state.board
-        print shape_type
+        #print shape_type
         child_states = []
         num_rotate = 1
         if shape_type == Shapes.t_shape:
@@ -112,7 +112,7 @@ class Util:
             num_rotate = 4
         elif shape_type == Shapes.i_shape:
             num_rotate = 2
-        print str(num_rotate)
+        #print str(num_rotate)
         
         id = 1
         
@@ -198,8 +198,21 @@ class Util:
                             id += 1
                             #filling in state id, state board, score and parent state
                             child_state = State.State(child_id, child_board, score, state)
+                            #re-assign game score
+                            child_state.game_score = state.game_score
+                            #assign parent
                             child_state.parent = state
+                            #assign lines killed
                             child_state.lines_killed = lines_killed
+                            #calc score
+                            if lines_killed == 1:
+                                child_state.game_score += 40
+                            elif lines_killed == 2:
+                                child_state.game_score += 100
+                            elif lines_killed == 3:
+                                child_state.game_score += 300
+                            elif lines_killed == 4:
+                                child_state.game_score += 1200
                             #print "Lines killed: ", str(lines_killed)
                             
                             #append a tuple that includes the score so we can sort
@@ -214,5 +227,7 @@ class Util:
                             #print
                             
                             break
+        del board
+        del state                    
         return child_states
     
