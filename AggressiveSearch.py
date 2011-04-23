@@ -68,6 +68,7 @@ class AggressiveSearch:
         
 #            if not (len(state_tuples) == 0):
             # make this the choice state. 
+#            print state_tuples[0][1].board
             last_board = state_tuples[0][1].board
             init_state = State.State(id, state_tuples.pop()[1].board, 0, None)
                 
@@ -77,7 +78,7 @@ class AggressiveSearch:
             # loop back and grab the next piece
 
         # print the state of the last board
-        print "Score:",score
+        print str(low_threshold) + "," + str(hi_threshold) + "," + str(score) + "," + str(count)
 
 def under_current_threshold(current_threshold, coord_list):
     y = 20

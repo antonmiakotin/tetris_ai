@@ -162,6 +162,7 @@ class Util:
                     #more hack for reverse_l and l shapes
                     the_shape.move("left")
                     shape_ahead = Shapes.shape(the_shape.board, the_shape.get_coords())
+#                    shape_ahead = copy.deepcopy(the_shape)
                     shape_ahead.move("right")
                     
                     for z in range(x):
