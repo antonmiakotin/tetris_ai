@@ -8,10 +8,13 @@ from  Util import *
 # Method runs the algorithm
 class AggressiveSearch:
     @staticmethod
-    def run(board, piece_list, threshold):
+    def run(board, piece_list, hi_threshold, low_threshold):
+        count = 0
+        score = 0
         # for list of pieces
         id = (0,0)
         init_state = State.State(id, board, 0, None)
+        current_threshold = hi_threshold
 
         for piece in piece_list:
             # first grab the first set of states given the parent state
@@ -22,10 +25,11 @@ class AggressiveSearch:
 
             #hold all of the states to remove
             pruned_states = []
-
+            count += 1
             for state_tuple in state_tuples:
-                # if under the threshold
-                if under_threshold(threshold, state_tuple[1].board.landed):
+                # if under the current_threshold
+                if under_current_threshold(current_threshold, state_tuple[1].board.landed):
+                    current_threshold = hi_threshold
                     # remove the ones where less than 4 lines have been created
                     if state_tuple[1].lines_killed < 4:
                         if state_tuple[1].lines_killed != 0:
@@ -38,33 +42,47 @@ class AggressiveSearch:
                         tmp = state_tuple
                         state_tuples.remove(state_tuple)
                         state_tuples.insert(0,tmp)
+                        current_threshold = low_threshold
+
 
             #yikes we removed everything! undo undo!
             if len(pruned_states) == len(state_tuples):
-                #unmark all but the last one because it's the best
-                
+                #unmark the last one because it's the best
                 pruned_states = pruned_states[:-1]
+                #we just lost the game
+                if len(pruned_states) == 0:
+                    print "lost game at piece",count
+                    break
+
                 
             #remove the ones we marked
             for s in pruned_states:
                 state_tuples.remove(s)
-                    
+            
             # remove all but the best choice
-            if len(state_tuples) != 1:
-                state_tuples = state_tuples[:1]
+#            if len(state_tuples) != 1:
+            state_tuples = state_tuples[:1]
 
-            print str(state_tuples[0][1])
-
+            #grab the score
+            score += state_tuples[0][1].game_score
+        
+#            if not (len(state_tuples) == 0):
             # make this the choice state. 
+            last_board = state_tuples[0][1].board
             init_state = State.State(id, state_tuples.pop()[1].board, 0, None)
+                
+
+
+                
             # loop back and grab the next piece
 
-        # print the state of the last board?
+        # print the state of the last board
+        print "Score:",score
 
-def under_threshold(threshold, coord_list):
+def under_current_threshold(current_threshold, coord_list):
     y = 20
     for coord in coord_list:
         if coord[1] < y:
             y = coord[1]
             
-    return y > threshold
+    return y > current_threshold
