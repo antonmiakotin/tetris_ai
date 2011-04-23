@@ -135,17 +135,17 @@ class Util:
                 
                 #actually create a piece from the class that was passed in
                 #starting at y=3, otherwise pieces don't have room to rotate
-                shape = shape_type.rel_check_and_create(board, (0,3))
+                the_shape = shape_type.rel_check_and_create(board, (0,3))
                 
 
                 
 
                 #rotate shape to needed orientation
-                if shape:
+                if the_shape:
                      # Need to rotate the shape before moving it
                     for j in range(i):
                         #print "rotating clockwise"
-                        did_rotate = shape.rotate()
+                        did_rotate = the_shape.rotate()
                         did_ahead_rotate = shape_ahead.rotate()
                         #print "rotating: ", str(did_rotate)
                     
@@ -160,32 +160,33 @@ class Util:
                     
                     
                     #more hack for reverse_l and l shapes
-                    shape.move("left")
-                    shape_ahead = copy.deepcopy(shape)
+                    the_shape.move("left")
+                    shape_ahead = Shapes.shape(the_shape.board, the_shape.get_coords())
                     shape_ahead.move("right")
                     
                     for z in range(x):
                         # keep track of this to pull us out of loop 
                         
-                        can_move_right = shape.move("right")
+                        can_move_right = the_shape.move("right")
                         can_move_right_plus_one = shape_ahead.move("right")
 
                 
                 for y in range(3,board.max_y):
 
                     #check to see that a piece can be created at the coordinate
-                    if shape:
-                        canmove =  shape.move("down")
+                    if the_shape:
+                        canmove =  the_shape.move("down")
                         if not canmove:
                             #either we've hit a piece or we've hit the bottom
                             #make a copy of the board
-                            child_board = copy.deepcopy(board)
+                            child_board = Board()
+                            child_board.landed = board.copy_landed()
 
                             #calculate the score
-                            score = Util.eval(shape, child_board)
+                            score = Util.eval(the_shape, child_board)
 
                             #add the current piece to the 'landed' array of board
-                            child_board.add_shape(shape)
+                            child_board.add_shape(the_shape)
                             
                             #kills rows and return how many killed
                             lines_killed = child_board.check_for_complete_row()
@@ -201,7 +202,7 @@ class Util:
                             #re-assign game score
                             child_state.game_score = state.game_score
                             #assign parent
-                            child_state.parent = state
+                            #child_state.parent = state
                             #assign lines killed
                             child_state.lines_killed = lines_killed
                             #calc score
@@ -228,6 +229,8 @@ class Util:
                             
                             break
         del board
-        del state                    
+        del state
+        del the_shape
+        del shape_ahead                 
         return child_states
     

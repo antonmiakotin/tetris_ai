@@ -17,6 +17,7 @@ class Block(object):
         
     def coord( self ):
         return (self.x, self.y)
+    
         
 class shape(object):
     """
@@ -50,7 +51,14 @@ class shape(object):
             block = Block(coord)
             
             self.blocks.append( block )
-
+            
+    def copy_blocks(self):
+        new_blocks = []
+        for block in blocks:
+            new_block = Block(block.coord())
+            new_blocks.append(new_block)
+        return new_blocks
+        
     def move( self, direction ):
         """
         Move the blocks in the direction indicated by adding (dx, dy) to the

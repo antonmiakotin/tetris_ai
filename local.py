@@ -27,16 +27,16 @@ if __name__ == "__main__":
     shape_classes = [Shapes.square_shape, Shapes.t_shape, Shapes.l_shape, Shapes.reverse_l_shape, Shapes.i_shape]
     random_pieces = []
     #pic random pieces
-    #for i in range(200):
-    #    cls = choice(shape_classes)
-    #    random_pieces.append(cls)
+    for i in range(1000):
+        cls = choice(shape_classes)
+        random_pieces.append(cls)
     id = (0,0)
     init_state = State.State(id, board, 0, None)
     child_states = [init_state]
     #random_pieces = [Shapes.i_shape]
 
-    #for piece in random_pieces:
-    while True:
+    for piece in random_pieces:
+    #while True:
         piece = choice(shape_classes)    
         for i in range(len(child_states)):
             #need to remove root nodes from board list
@@ -56,10 +56,12 @@ if __name__ == "__main__":
             #f.write( "CHILD STATES\n" )
             print "CHILD STATES"
             print "#"*30+"\n"
+            
             #f.write ( "#"*30+"\n" )
             for tup in result_tuples:
                 #f.write( str(tup[1].board.last_piece) + "\n")
                 #f.write( str(tup[1]) )
+                print "Score: ", str(tup[1].game_score)
                 print str(tup[1])
                 child_states.append(tup[1])
             #f.write( "\n\n")

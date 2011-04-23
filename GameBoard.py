@@ -122,6 +122,12 @@ class Board():
         self.last_piece = shape
         for block in shape.blocks:
             self.landed.append(block.coord())
+            
+    def copy_landed(self):
+        new_board = []
+        for tup in self.landed:
+            new_board.append(tup)
+        return new_board
         
     def check_block( self, (x, y) ):
         """
