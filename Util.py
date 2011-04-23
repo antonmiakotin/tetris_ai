@@ -147,7 +147,7 @@ class Util:
                         #print "rotating clockwise"
                         did_rotate = shape.rotate()
                         did_ahead_rotate = shape_ahead.rotate()
-                        print "rotating: ", str(did_rotate)
+                        #print "rotating: ", str(did_rotate)
                     
                     '''
                     good god this is ugly.  we need a way of checking one square
@@ -186,15 +186,22 @@ class Util:
 
                             #add the current piece to the 'landed' array of board
                             child_board.add_shape(shape)
-
+                            
+                            #kills rows and return how many killed
+                            lines_killed = child_board.check_for_complete_row()
+                            
                             #create a state that includes child board, the score and the parent board
                             #create child id
                             child_id = (state.id[0], id)
 
                             #increment id
                             id += 1
+                            #filling in state id, state board, score and parent state
                             child_state = State.State(child_id, child_board, score, state)
                             child_state.parent = state
+                            child_state.lines_killed = lines_killed
+                            #print "Lines killed: ", str(lines_killed)
+                            
                             #append a tuple that includes the score so we can sort
                             child_states.append((child_state.score, child_state))
                             #print "stopped at: ", x,y

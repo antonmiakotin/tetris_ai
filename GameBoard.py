@@ -32,17 +32,13 @@ class Board():
         #last piece that was added to the landed list 
         self.last_piece = None
 
-    def check_for_complete_row( self, blocks ):
+    def check_for_complete_row( self ):
         """
         Look for a complete row of blocks, from the bottom up until the top row
         or until an empty row is reached.
         """
         rows_deleted = 0
-        
-        # Add the blocks to those in the grid that have already 'landed'
-        for block in blocks:
-            self.landed[ block.coord() ] = block.id
-        
+                
         empty_row = 0
 
         # find the first empty row
@@ -71,22 +67,15 @@ class Board():
                 
                 #delete the completed row
                 for x in xrange(self.max_x):
-                    block = self.landed.pop((x,y))
-                    self.delete_block(block)
-                    del block
+                    self.landed.remove((x,y))
 
                     
                 # move all the rows above it down
                 for ay in xrange(y-1, empty_row, -1):
                     for x in xrange(self.max_x):
-                        block = self.landed.get((x,ay), None)
-                        if block:
-                            block = self.landed.pop((x,ay))
-                            dx,dy = direction_d[DOWN]
-                            
-                            self.move_block(block, direction_d[DOWN])
-                            self.landed[(x+dx, ay+dy)] = block
-
+                            if (x,ay) in self.landed:
+                                self.landed.remove((x,ay))
+                                self.landed.append((x,ay+1))
                 # move the empty row down index down too
                 empty_row +=1
                 # y stays same as row above has moved down.
@@ -97,7 +86,7 @@ class Board():
         #self.output() # non-gui diagnostic
                 
         # return the score, calculated by the number of rows deleted.        
-        return (100 * rows_deleted) * rows_deleted
+        return rows_deleted
                 
     def __str__( self ):
         string = ""
