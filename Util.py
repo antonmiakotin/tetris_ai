@@ -136,7 +136,7 @@ class Util:
                 #actually create a piece from the class that was passed in
                 #starting at y=3, otherwise pieces don't have room to rotate
                 the_shape = shape_type.rel_check_and_create(board, (0,3))
-                
+                shape_ahead = shape_type.rel_check_and_create(board, (0,3))
 
                 
 
