@@ -38,7 +38,7 @@ if __name__ == "__main__":
             lines = fptr.readlines()
             fptr.close()
             pieces = shape.list_from_str_list(lines)
-            AggressiveSearch.run(board, pieces, int(sys.argv[3]), int(sys.argv[4])) 
+            AggressiveSearch.run(board, pieces, int(sys.argv[3]), int(sys.argv[4]), int(sys.argv[5])) 
 
         elif ("-B" in sys.argv) or ("-b" in sys.argv):
             fptr = open(sys.argv[2], 'r')

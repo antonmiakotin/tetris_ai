@@ -8,7 +8,7 @@ from  Util import *
 # Method runs the algorithm
 class AggressiveSearch:
     @staticmethod
-    def run(board, piece_list, hi_threshold, low_threshold):
+    def run(board, piece_list, hi_threshold, low_threshold, game):
         count = 0
         score = 0
         # for list of pieces
@@ -51,7 +51,6 @@ class AggressiveSearch:
                 pruned_states = pruned_states[:-1]
                 #we just lost the game
                 if len(pruned_states) == 0:
-                    print "lost game at piece",count
                     break
 
                 
@@ -78,7 +77,7 @@ class AggressiveSearch:
             # loop back and grab the next piece
 
         # print the state of the last board
-        print str(low_threshold) + "," + str(hi_threshold) + "," + str(score) + "," + str(count)
+        print str(game) + "," + str(low_threshold) + "," + str(hi_threshold) + "," + str(score) + "," + str(count)
 
 def under_current_threshold(current_threshold, coord_list):
     y = 20
