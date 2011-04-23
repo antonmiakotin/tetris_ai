@@ -49,6 +49,7 @@ class Util:
         depth_score = 0
         #don't count own blocks as touching        
         already_hit = []
+        
         for block in shape.blocks:
             current = block.coord()
             #print "current:", current
@@ -83,6 +84,8 @@ class Util:
                 #print "\tdown hit", down
                 already_hit.append(down)
                 touching_score += 1
+            if ((down not in board.landed) and (down not in shape.get_coords()) and (down[1] < board.max_y)):
+                touching_score -= 5
         depth_score = Util.get_bottom_block(shape)
         '''
         print "\tTouching: ", touching_score
@@ -191,17 +194,17 @@ class Util:
                             #increment id
                             id += 1
                             child_state = State.State(child_id, child_board, score, state)
-
+                            child_state.parent = state
                             #append a tuple that includes the score so we can sort
                             child_states.append((child_state.score, child_state))
                             #print "stopped at: ", x,y
                             #print "return state: ", child_id
                             
-                            print child_board
-                            print x,y
-                            print str(can_move_right)
-                            print str(can_move_right_plus_one)
-                            print
+                            #print child_board
+                            #print x,y
+                            #print str(can_move_right)
+                            #print str(can_move_right_plus_one)
+                            #print
                             
                             break
         return child_states
