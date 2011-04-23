@@ -68,7 +68,7 @@ def get_min_kill(num_of_shapes_remaining, num_blocks_on_board):
     min_lines_to_kill = 0
     # num_blocks_avail is just the total number of blocks on the board plus the blocks yet to drop.
     num_blocks_avail = (num_of_shapes_remaining*4) + num_blocks_on_board
-    if num_blocks_on_board >= panic_factor # if the board starts to get filled up, it's time to panic
+    if num_blocks_on_board >= panic_factor: # if the board starts to get filled up, it's time to panic
         min_lines_to_kill = 0
     elif num_blocks_avail >= 80: # 20 shapes should be able to kill 4 lines
         min_lines_to_kill = 4
