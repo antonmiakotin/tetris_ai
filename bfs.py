@@ -5,42 +5,77 @@ import copy
 import State
 import os
 
-max_tree_depth = 8
-
-def run(myBoard, myShapes):
-    print 'Running from BFS.py...'
+def run(myBoard, myShapes, max_tree_depth=5):
 	
-    finished = False
     root_state = State.State((0,0), myBoard, 0, None)
     state_queue = [ root_state ]
     shape_queue = copy.deepcopy(myShapes)
     tree_depth = 0
+    lost = False # this becomes true if we lose the game, duh
+    # this is used to trace back to best state if we lose
+    best_states_at_old_depth = State.State((0,0), myBoard, 0, None)
     
     while(len(shape_queue) > 0):
+        best_states_at_old_depth = getHighestScoringStates(state_queue)
         # Use the same shape to generate child states for all current states in the queue
         for i in range(len(state_queue)):
             child_states = getSortedChildStates( state_queue[0], shape_queue[0] )
+            num_blocks_on_board = len(state_queue[0].board.landed)
             state_queue.remove(state_queue[0])
-            # need to prune some child states to reduce the state space
-            child_states = prune_states(child_states,2,3)
+            # we need to prune some child states to reduce the state space.
+            # get_min_kill() will tell us the minimum number of lines we are allowed to kill
+            min_kill = get_min_kill(len(shape_queue), num_blocks_on_board)
+            # prune so only 2 states remain
+            child_states = prune_states(child_states, 2, min_kill)
             # CODE HERE
             state_queue.extend(child_states)
         shape_queue.remove(shape_queue[0])
+        # If we lost the game
+        if len(state_queue) == 0:
+            lost = True
+            break
         tree_depth += 1
+        print 'DEPTH =', str(tree_depth)
         # If the tree gets too deep, we need to start over at the best state so far
-        if tree_depth > max_tree_depth:
+        if tree_depth >= max_tree_depth:
             print 'Restarting BFS from best state...'
-            os.system('pause')
-            state_queue = getHighestScoringStates(state_queue)[0]
+            #os.system('pause')
+            state_queue = [getHighestScoringStates(state_queue)[0]]
+            print str(state_queue[0])
+            print 'Num blocks on board:', str(len(state_queue[0].board.landed))
             tree_depth = 0
 	
-    # Get the best final states (highest game scores)
-    print 'getting best states...'
-    best_states = getHighestScoringStates(state_queue)
-    print str(best_states[0])
-    os.system('pause')
-    return best_states[0]
+    if lost == False:
+        # Get the best final states (highest game scores)
+        best_states = getHighestScoringStates(state_queue)
+        print str(best_states[0])
+        print 'We won! :)'
+        print 'Final game score:', best_states[0].game_score
+        os.system('pause')
+        return best_states[0]
+    else: # We lost the game
+        print str(best_states_at_old_depth[0])
+        print 'We lost! :('
+        print 'Final game score:', best_states_at_old_depth[0].game_score
+        os.system('pause')
+        return best_states_at_old_depth[0]
 
+def get_min_kill(num_of_shapes_remaining, num_blocks_on_board):
+    min_lines_to_kill = 0
+    # num_blocks_avail is just the total number of blocks on the board plus the blocks yet to drop.
+    num_blocks_avail = (num_of_shapes_remaining*4) + num_blocks_on_board
+    if num_blocks_on_board >= 100: # if the board starts to get filled up, it's time to panic
+        min_lines_to_kill = 0
+    elif num_blocks_avail >= 80: # 20 shapes should be able to kill 4 lines
+        min_lines_to_kill = 4
+    elif num_blocks_avail >= 60:
+        min_lines_to_kill = 3
+    elif num_blocks_avail >= 40:
+        min_lines_to_kill = 2
+    elif num_blocks_avail >= 20:
+        min_lines_to_kill = 1
+    return min_lines_to_kill
+    
 def getSortedChildStates(myCurrentState, shape):
     result_tuples = Util.Util.generate_child_states(myCurrentState, shape)
     child_states = sorted(result_tuples, key=lambda myCurrentState: myCurrentState[0], reverse = True)
@@ -51,8 +86,9 @@ def getSortedChildStates(myCurrentState, shape):
 
 # Returns a list of states with the highest game scores
 def getHighestScoringStates(list_of_states):
+    assert (len(list_of_states) > 0)
     return_list = []
-    highest_score = 0
+    highest_score = -1
     for temp_state in list_of_states:
         if temp_state.game_score > highest_score:
             highest_score = temp_state.game_score
