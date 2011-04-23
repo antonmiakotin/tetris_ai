@@ -5,8 +5,11 @@ import copy
 import State
 import os
 
-def run(myBoard, myShapes, max_tree_depth=5):
+panic_factor = 90
+
+def run(myBoard, myShapes, max_tree_depth=5, branching_factor=2):
 	
+    total_shapes = len(myShapes)
     root_state = State.State((0,0), myBoard, 0, None)
     state_queue = [ root_state ]
     shape_queue = copy.deepcopy(myShapes)
@@ -25,8 +28,8 @@ def run(myBoard, myShapes, max_tree_depth=5):
             # we need to prune some child states to reduce the state space.
             # get_min_kill() will tell us the minimum number of lines we are allowed to kill
             min_kill = get_min_kill(len(shape_queue), num_blocks_on_board)
-            # prune so only 2 states remain
-            child_states = prune_states(child_states, 2, min_kill)
+            # prune so only branching_factor states remain
+            child_states = prune_states(child_states, branching_factor, min_kill)
             # CODE HERE
             state_queue.extend(child_states)
         shape_queue.remove(shape_queue[0])
@@ -35,13 +38,14 @@ def run(myBoard, myShapes, max_tree_depth=5):
             lost = True
             break
         tree_depth += 1
-        print 'DEPTH =', str(tree_depth)
+        # print 'DEPTH =', str(tree_depth)
         # If the tree gets too deep, we need to start over at the best state so far
         if tree_depth >= max_tree_depth:
             print 'Restarting BFS from best state...'
             #os.system('pause')
             state_queue = [getHighestScoringStates(state_queue)[0]]
             print str(state_queue[0])
+            print 'Shape', str(total_shapes - len(shape_queue)), '/', str(total_shapes)
             print 'Num blocks on board:', str(len(state_queue[0].board.landed))
             tree_depth = 0
 	
@@ -64,7 +68,7 @@ def get_min_kill(num_of_shapes_remaining, num_blocks_on_board):
     min_lines_to_kill = 0
     # num_blocks_avail is just the total number of blocks on the board plus the blocks yet to drop.
     num_blocks_avail = (num_of_shapes_remaining*4) + num_blocks_on_board
-    if num_blocks_on_board >= 100: # if the board starts to get filled up, it's time to panic
+    if num_blocks_on_board >= panic_factor # if the board starts to get filled up, it's time to panic
         min_lines_to_kill = 0
     elif num_blocks_avail >= 80: # 20 shapes should be able to kill 4 lines
         min_lines_to_kill = 4
