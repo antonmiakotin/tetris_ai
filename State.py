@@ -16,4 +16,4 @@ class State:
         self.parent = parent
         self.lines_killed = lines_killed
     def __str__(self):
-        return "Board:\n" + "ID: " + str(self.id) + "\n" + str(self.board) + "\n" + "Score: " + str(self.score) + "\n"
+        return "Board:\n" + "ID: " + str(self.id) + "\n" + str(self.board) + "\n" + "Score: " + str(self.score) + "\nTotalGameScore: " + str(self.game_score) + "\n"
