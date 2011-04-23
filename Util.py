@@ -200,7 +200,7 @@ class Util:
                             child_state = State.State(child_id, child_board, score, state)
                             child_state.parent = state
                             child_state.lines_killed = lines_killed
-                            print "Lines killed: ", str(lines_killed)
+                            #print "Lines killed: ", str(lines_killed)
                             
                             #append a tuple that includes the score so we can sort
                             child_states.append((child_state.score, child_state))
