@@ -45,7 +45,13 @@ if __name__ == "__main__":
             lines = fptr.readlines()
             fptr.close()
             pieces = shape.list_from_str_list(lines)
-            bfs.run(board, pieces)
+            # $> python main.py -b <game_file> <max_tree_depth> <branching_factor>
+            if len(sys.argv) >= 5:
+                bfs.run(board, pieces, int(sys.argv[3]), int(sys.argv[4]))
+            elif len(sys.argv) == 4:
+                bfs.run(board, pieces, int(sys.argv[3]))
+            else:
+                bfs.run(board, pieces)
     else:
         print "Usage -[LAB] [filename].tgame"
 
