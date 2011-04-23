@@ -2,6 +2,7 @@ import GameBoard
 import Util
 from Shapes import *
 from  AggressiveSearch import *
+import local
 import bfs
 import sys
 
@@ -30,9 +31,12 @@ if __name__ == "__main__":
     if(len(sys.argv) > 1):
         if "-L" in sys.argv:    # not that clever, just pass -L as the first argument
             # and the filename as the second
-
+            fptr = open(sys.argv[2], 'r')
+            lines = fptr.readlines()
+            fptr.close()
+            pieces = shape.list_from_str_list(lines)
             # pass in the board and the file name
-            LocalSerach.run(board, sys.argv[2])
+            local.run(board, pieces)
         elif "-A" in sys.argv:
             fptr = open(sys.argv[2], 'r')
             lines = fptr.readlines()

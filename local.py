@@ -3,6 +3,42 @@ import Util
 import Shapes
 from random import choice
 import State
+import time
+def run(board, piece_list):
+    id = (0,0)
+    init_state = State.State(id, board, 0, None)
+    child_states = [init_state]
+    
+    for piece in piece_list:
+    #while True:
+        for i in range(len(child_states)):
+            #need to remove root nodes from board list
+            state = child_states.pop(i)
+            #run states function
+            result_tuples = Util.Util.generate_child_states(state, piece)
+            
+            #sort all boards, highest score first
+            result_tuples = sorted(result_tuples, key=lambda state: state[0], reverse = True)
+            #pick the top 3
+            result_tuples = result_tuples[:1]
+
+            #output to file
+            #f.write( "BASE STATE\n" )
+            #f.write( "#"*30+"\n" )
+            #f.write( str(state) )
+            #f.write( "CHILD STATES\n" )
+            print "CHILD STATES"
+            print "#"*30+"\n"
+            
+            #f.write ( "#"*30+"\n" )
+            for tup in result_tuples:
+                #f.write( str(tup[1].board.last_piece) + "\n")
+                #f.write( str(tup[1]) )
+                print "Score: ", str(tup[1].game_score)
+                print str(tup[1])
+                child_states.append(tup[1])
+                time.sleep(.5)
+            #f.write( "\n\n")
 
 
 if __name__ == "__main__":
@@ -64,4 +100,5 @@ if __name__ == "__main__":
                 print "Score: ", str(tup[1].game_score)
                 print str(tup[1])
                 child_states.append(tup[1])
+                time.sleep(.5)
             #f.write( "\n\n")
