@@ -6,7 +6,7 @@ random_pieces = []
     #pic random pieces
 for i in range(10):
     fptr = open(str(i) + "rg.tgame","w")
-    for j in range(100):
+    for j in range(1000):
         cls = choice(shape_classes)
         fptr.write(str(cls)[15:-2] + "\n")
 

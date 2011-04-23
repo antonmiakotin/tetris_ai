@@ -5,6 +5,9 @@
 # Stephen Kalpin
 from  Util import *
 
+debug = True
+
+
 # Method runs the algorithm
 class AggressiveSearch:
     @staticmethod
@@ -67,7 +70,8 @@ class AggressiveSearch:
         
 #            if not (len(state_tuples) == 0):
             # make this the choice state. 
-#            print state_tuples[0][1].board
+            if debug == True:
+                print state_tuples[0][1].board
             last_board = state_tuples[0][1].board
             init_state = State.State(id, state_tuples.pop()[1].board, 0, None)
                 
