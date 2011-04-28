@@ -21,22 +21,6 @@ DOWN = "down"
 
 direction_d = { "left": (-1, 0), "right": (1, 0), "down": (0, 1) }
 
-class status_bar( Frame ):
-    """
-    Status bar to display the score and level
-    """
-    def __init__(self, parent):
-        Frame.__init__( self, parent )
-        self.label = Label( self, bd=1, relief=SUNKEN, anchor=W )
-        self.label.pack( fill=X )
-        
-    def set( self, format, *args):
-        self.label.config( text = format % args)
-        self.label.update_idletasks()
-        
-    def clear( self ):
-        self.label.config(test="")
-        self.label.update_idletasks()
 
 
 def level_thresholds( first_level, no_of_levels ):
@@ -136,7 +120,7 @@ class game_controller(object):
                 if(self.score > tmp_score):
                     self.status_window.log_text("POINTS " + str(self.score - tmp_score))
                     
-                del self.shape
+                    del self.shape
                 self.status_window.log_text("LANDED")
                 self.shape = self.get_next_shape()
 
