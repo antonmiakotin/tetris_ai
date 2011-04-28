@@ -102,49 +102,6 @@ class game_controller(object):
         self.shape = self.get_next_shape()
 
         self.after_id = self.parent.after( self.delay, self.move_my_shape )
-    
-    
-    
-    def eval(self):
-        touching = 0
-        already_hit = []
-        for block in self.shape.blocks:
-            current = block.coord()
-            print "current:", current
-            
-            #create tuples of coordinates of blocks to check
-            right = (current[0]+1, current[1])
-            left = (current[0]-1, current[1])
-            #TK coord system is down and to right
-            #that's why up and down are reversed
-            down = (current[0], current[1]+1)
-            up = (current[0], current[1]-1)
-            
-            right_hit = self.board.landed.get(right)
-            left_hit = self.board.landed.get(left)
-            up_hit = self.board.landed.get(up)
-            down_hit = self.board.landed.get(down)
-            
-            
-            if( right_hit and (right not in already_hit)):
-                print "\tright hit", right
-                already_hit.append(right)
-                touching += 1
-            if ( left_hit and (left not in already_hit) ):
-                print "\tleft hit", left
-                already_hit.append(left)
-                touching += 1
-            if ( up_hit and (up not in already_hit) ):
-                print "\tup hit", up
-                already_hit.append(up)
-                touching += 1
-            if ( down_hit and (down not in already_hit) ):
-                print "\tdown hit", down
-                already_hit.append(down)
-                touching += 1
-        print "\tTouching: ", touching
-        print "-"*20
-        
         
     def handle_move(self, direction):
         #if you can't move then you've hit something
@@ -152,7 +109,7 @@ class game_controller(object):
             self.status_window.log_text("HIT")
             # if your heading down then the shape has 'landed'
             if direction == DOWN:
-                self.eval()
+
                 tmp_score = self.score
                 self.score += self.board.check_for_complete_row(
                     self.shape.blocks
