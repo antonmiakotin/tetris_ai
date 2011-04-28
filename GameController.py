@@ -7,7 +7,8 @@ from Shapes import *
 from random import randint
 from StatusWindow import *
 import tkMessageBox
-from BoardStates import *
+from Util import *
+import State
 
 NO_OF_LEVELS = 10
 SCALE = 20
@@ -102,7 +103,11 @@ class game_controller(object):
         self.shape = self.get_next_shape()
 
         self.after_id = self.parent.after( self.delay, self.move_my_shape )
+<<<<<<< HEAD
 
+=======
+        
+>>>>>>> f2af667ad37a22c7618dfca64b06fb857a87150c
     def handle_move(self, direction):
             #if you can't move then you've hit something
         if not self.shape.move( direction ):
@@ -228,6 +233,12 @@ class game_controller(object):
         s = the_shape.check_and_create(self.board)
         self.status_window.new_shape(s)
         self.status_window.log_board(self.board)
+<<<<<<< HEAD
         BoardStates.generate_child_states(self.board, the_shape)
         #BoardStates.get_width_height(s)
+=======
+        # b = State.State((0,0),self.board,self.score,None)
+        # temp = Util.generate_child_states(b,s)
+        # print temp
+>>>>>>> f2af667ad37a22c7618dfca64b06fb857a87150c
         return s

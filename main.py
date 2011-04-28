@@ -29,7 +29,7 @@ if __name__ == "__main__":
     
     #run the game in file input mode
     if(len(sys.argv) > 1):
-        if "-L" in sys.argv:    # not that clever, just pass -L as the first argument
+        if ("-L" in sys.argv) or ("-l" in sys.argv):    # not that clever, just pass -L as the first argument
             # and the filename as the second
             fptr = open(sys.argv[2], 'r')
             lines = fptr.readlines()
