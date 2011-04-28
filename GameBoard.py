@@ -29,6 +29,20 @@ class status_bar( Frame ):
         self.label.update_idletasks()
 
 class Board( Frame ):
+
+    def add_shape(self, shape):
+        self.last_piece = shape
+        for block in shape.blocks:
+            self.landed.append(block.coord())
+
+
+    def copy_landed(self):
+        new_board = []
+        for tup in self.landed:
+            new_board.append(tup)
+        return new_board
+
+
     """
     The board represents the tetris playing area. A grid of x by y blocks.
     """
