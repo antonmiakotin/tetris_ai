@@ -229,7 +229,7 @@ class game_controller(object):
         s = the_shape.check_and_create(self.board)
         self.status_window.new_shape(s)
         self.status_window.log_board(self.board)
-        b = State.State((0,0),self.board,self.score,None)
-        temp = Util.generate_child_states(b,s)
-        print temp
+        # b = State.State((0,0),self.board,self.score,None)
+        # temp = Util.generate_child_states(b,s)
+        # print temp
         return s
