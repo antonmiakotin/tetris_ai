@@ -42,7 +42,7 @@ class Board():
         empty_row = 0
 
         # find the first empty row
-        for y in xrange(self.max_y -1, -1, -1):
+        for y in xrange(self.max_y -1, -2, -1):
             row_is_empty = True
             for x in xrange(self.max_x):
                 if (x,y) in self.landed:
@@ -71,7 +71,7 @@ class Board():
 
                     
                 # move all the rows above it down
-                for ay in xrange(y-1, empty_row, -1):
+                for ay in xrange(y -1, empty_row, -1):
                     for x in xrange(self.max_x):
                             if (x,ay) in self.landed:
                                 self.landed.remove((x,ay))

@@ -6,7 +6,7 @@
 from  Util import *
 import time
 
-debug = False
+debug = True
 
 
 # Method runs the algorithm
@@ -29,7 +29,8 @@ class AggressiveSearch:
             # You just lost the game
             # ****************************************
             if len(state_tuples) == 0:
-                print "lost game"
+                if debug == True:
+                    print "lost game"
                 break
 
             #****************************************
@@ -106,7 +107,7 @@ class AggressiveSearch:
             # loop back and grab the next piece
 
         # print the state of the last board after everything is done
-        print str(game) + "," + str(low_threshold) + "," + str(hi_threshold) + "," + str(score) + "," + str(count)
+        print str(game) + "," + str(hi_threshold) + "," + str(low_threshold) + "," + str(score) + "," + str(count)
 
 def under_current_threshold(current_threshold, coord_list):
     y = 20
