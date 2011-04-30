@@ -6,7 +6,7 @@
 from  Util import *
 import time
 
-debug = True
+debug = False
 
 
 # Method runs the algorithm
