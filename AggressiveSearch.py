@@ -6,7 +6,7 @@
 from  Util import *
 import time
 
-debug = True
+debug = False
 
 
 # Method runs the algorithm
@@ -99,10 +99,10 @@ class AggressiveSearch:
 
             
             count += 1
-            score += init_state.game_score
+            score = init_state.game_score
             if debug == True:
                 print init_state.board
-#                time.sleep(.5)
+                time.sleep(.5)
             # loop back and grab the next piece
 
         # print the state of the last board after everything is done
