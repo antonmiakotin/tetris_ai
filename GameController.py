@@ -21,8 +21,6 @@ DOWN = "down"
 
 direction_d = { "left": (-1, 0), "right": (1, 0), "down": (0, 1) }
 
-
-
 def level_thresholds( first_level, no_of_levels ):
     """
     Calculates the score at which the level will change, for n levels.
@@ -120,7 +118,7 @@ class game_controller(object):
                 if(self.score > tmp_score):
                     self.status_window.log_text("POINTS " + str(self.score - tmp_score))
                     
-                    del self.shape
+                del self.shape
                 self.status_window.log_text("LANDED")
                 self.shape = self.get_next_shape()
 
@@ -230,6 +228,6 @@ class game_controller(object):
         s = the_shape.check_and_create(self.board)
         self.status_window.new_shape(s)
         self.status_window.log_board(self.board)
-        #BoardStates.generate_child_states(self.board, the_shape)
+        BoardStates.generate_child_states(self.board, the_shape)
         #BoardStates.get_width_height(s)
         return s
