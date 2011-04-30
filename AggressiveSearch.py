@@ -5,7 +5,7 @@
 # Stephen Kalpin
 from  Util import *
 
-debug = False
+debug = True
 
 
 # Method runs the algorithm
@@ -28,6 +28,8 @@ class AggressiveSearch:
 
             #hold all of the states to remove
             pruned_states = []
+            state_with_line_removed = []
+            states_with_tetris = []
             count += 1
             for state_tuple in state_tuples:
                 # if under the current_threshold
@@ -37,15 +39,24 @@ class AggressiveSearch:
                     if state_tuple[1].lines_killed < 4:
                         if state_tuple[1].lines_killed != 0:
                             pruned_states.append(state_tuple)
+                    if state_tuple[1].lines_killed == 4:
+                        states_with_tetris.append(state_tuple)
 
-            # else place the ones where a line has been created to the front
+                #else place it in state_with_line_removed
                 else:
+                    current_threshold = low_threshold
                     if state_tuple[1].lines_killed > 0:
                         # choose this state
-                        tmp = state_tuple
-                        state_tuples.remove(state_tuple)
-                        state_tuples.insert(0,tmp)
-                        current_threshold = low_threshold
+                        state_with_line_removed.append(state_tuple)
+
+
+            if len(states_with_tetris) > 0:
+                states_with_tetris = sorted(states_with_tetris, key=lambda state: state[0], reverse = True)
+                if debug == True:
+                    print states_with_tetris[0][1].board
+                last_board = states_with_tetris[0][1].board
+                init_state = State.State(id, states_with_tetris.pop()[1].board, 0, None)
+                continue
 
 
             #yikes we removed everything! undo undo!
@@ -56,10 +67,14 @@ class AggressiveSearch:
                 if len(pruned_states) == 0:
                     break
 
-                
-            #remove the ones we marked
-            for s in pruned_states:
-                state_tuples.remove(s)
+            if current_threshold == low_threshold:
+                state_with_line_removed = sorted(state_with_line_removed, key=lambda state: state[0], reverse = True)
+                if len(state_with_line_removed) > 0:
+                    state_tuples = state_with_line_removed
+            else:
+                #remove the ones we marked
+                for s in pruned_states:
+                    state_tuples.remove(s)
             
             # remove all but the best choice
 #            if len(state_tuples) != 1:
@@ -88,5 +103,5 @@ def under_current_threshold(current_threshold, coord_list):
     for coord in coord_list:
         if coord[1] < y:
             y = coord[1]
-            
     return y > current_threshold
+
