@@ -4,6 +4,7 @@
 # the most points
 # Stephen Kalpin
 from  Util import *
+import time
 
 debug = True
 
@@ -87,6 +88,7 @@ class AggressiveSearch:
             # make this the choice state. 
             if debug == True:
                 print state_tuples[0][1].board
+                time.sleep(.5)
             last_board = state_tuples[0][1].board
             init_state = State.State(id, state_tuples.pop()[1].board, 0, None)
                 
