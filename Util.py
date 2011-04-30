@@ -84,8 +84,15 @@ class Util:
                 #print "\tdown hit", down
                 already_hit.append(down)
                 touching_score += 1
+
             if ((down not in board.landed) and (down not in shape.get_coords()) and (down[1] < board.max_y)):
-                touching_score -= 5
+				y_coord = down[1]
+				#go down the column and discount 5 for every contiguous hole
+				for i in range(y_coord, board.max_y):
+					if (down[0],i) not in board.landed:
+						touching_score -= 5
+					else:
+						break
         depth_score = Util.get_bottom_block(shape)
         '''
         print "\tTouching: ", touching_score
@@ -152,7 +159,6 @@ class Util:
 
                             #add the current piece to the 'landed' array of board
                             child_board.add_shape(the_shape)
-                            
                             #kills rows and return how many killed
                             lines_killed = child_board.check_for_complete_row()
                             
