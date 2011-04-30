@@ -37,7 +37,7 @@ def run(board, piece_list):
                 print "Score: ", str(tup[1].game_score)
                 print str(tup[1])
                 child_states.append(tup[1])
-                time.sleep(.5)
+                #time.sleep(.5)
             #f.write( "\n\n")
 
 
@@ -49,9 +49,9 @@ if __name__ == "__main__":
     board = GameBoard.Board()
     
     #fill in the bottom row
-    #for x in range (1,20):
-    #    for y in range(14,20):
-    #        board.landed.append((x,y))
+    for x in range (1,10):
+        for y in range(5,20):
+            board.landed.append((x,y))
     #throw some more random blocks
     #board.landed.append((3,18))
     #board.landed.append((2,18))
@@ -69,11 +69,11 @@ if __name__ == "__main__":
     id = (0,0)
     init_state = State.State(id, board, 0, None)
     child_states = [init_state]
-    #random_pieces = [Shapes.i_shape]
+    random_pieces = [Shapes.i_shape]
 
     for piece in random_pieces:
     #while True:
-        piece = choice(shape_classes)    
+        #piece = choice(shape_classes)    
         for i in range(len(child_states)):
             #need to remove root nodes from board list
             state = child_states.pop(i)
@@ -81,9 +81,9 @@ if __name__ == "__main__":
             result_tuples = Util.Util.generate_child_states(state, piece)
             
             #sort all boards, highest score first
-            result_tuples = sorted(result_tuples, key=lambda state: state[0], reverse = True)
+            #result_tuples = sorted(result_tuples, key=lambda state: state[0], reverse = True)
             #pick the top 3
-            result_tuples = result_tuples[:1]
+            #result_tuples = result_tuples[:1]
 
             #output to file
             #f.write( "BASE STATE\n" )
@@ -100,5 +100,5 @@ if __name__ == "__main__":
                 print "Score: ", str(tup[1].game_score)
                 print str(tup[1])
                 child_states.append(tup[1])
-                time.sleep(.5)
+                #time.sleep(.5)
             #f.write( "\n\n")

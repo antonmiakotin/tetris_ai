@@ -127,8 +127,8 @@ class Board():
         new_board = []
         for tup in self.landed:
             new_board.append(tup)
-        return new_board
-        
+        return new_board    
+    
     def check_block( self, (x, y) ):
         """
         Check if the x, y coordinate can have a block placed there.

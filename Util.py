@@ -101,8 +101,11 @@ class Util:
     def generate_child_states(state, shape_type):
         state.id = (state.id[0]+1, state.id[1])
         board = state.board
+        
         #print shape_type
         child_states = []
+        
+        #how many times this shape can be rotated
         num_rotate = 1
         if shape_type == Shapes.t_shape:
             num_rotate = 4
@@ -111,68 +114,29 @@ class Util:
         elif shape_type == Shapes.l_shape or shape_type == Shapes.reverse_l_shape:
             num_rotate = 4
         elif shape_type == Shapes.i_shape:
-            num_rotate = 2
-        #print str(num_rotate)
-        
+            num_rotate = 2        
         id = 1
         
-
-
-        #move back tomorrow
         for i in range(num_rotate):
 
-            # This is a total hack, but works
-            can_move_right = True
-            can_move_right_plus_one = True
-            
+
             #move piece down the column
             for x in range(board.max_x):
                 score = 0
-                if not can_move_right_plus_one:
-                    # stop evaluating
-                    # you are about to repeat yourself
-                    break
+
                 
                 #actually create a piece from the class that was passed in
-                #starting at y=3, otherwise pieces don't have room to rotate
-                the_shape = shape_type.rel_check_and_create(board, (0,3))
-                shape_ahead = shape_type.rel_check_and_create(board, (0,3))
+                the_shape = shape_type.create(board)
 
-                
+                for j in range(i):
+                    #print "rotating clockwise"
+                    did_rotate = the_shape.rotate()
+                    #print "rotating: ", str(did_rotate)
 
-                #rotate shape to needed orientation
-                if the_shape:
-                     # Need to rotate the shape before moving it
-                    for j in range(i):
-                        #print "rotating clockwise"
-                        did_rotate = the_shape.rotate()
-                        did_ahead_rotate = shape_ahead.rotate()
-                        #print "rotating: ", str(did_rotate)
-                    
-                    '''
-                    good god this is ugly.  we need a way of checking one square
-                    ahead of the piece that we're moving.  instead of creating an 
-                    elegant function like you're supposed to, i've made another piece
-                    that we're rotating and moving along with our proper piece.
-                    if this second shape can't be moved any more to the right, we're done
-                    gross...
-                    '''
-                    
-                    
-                    #more hack for reverse_l and l shapes
-                    the_shape.move("left")
-                    shape_ahead = Shapes.shape(the_shape.board, the_shape.get_coords())
-#                    shape_ahead = copy.deepcopy(the_shape)
-                    shape_ahead.move("right")
-                    
-                    for z in range(x):
-                        # keep track of this to pull us out of loop 
-                        
-                        can_move_right = the_shape.move("right")
-                        can_move_right_plus_one = shape_ahead.move("right")
-
-                
-                for y in range(3,board.max_y):
+                can_move_right = the_shape.move_to((x,0))
+                if not can_move_right:
+                    continue
+                for y in range(board.max_y):
 
                     #check to see that a piece can be created at the coordinate
                     if the_shape:
@@ -232,6 +196,5 @@ class Util:
         del board
         del state
         del the_shape
-        del shape_ahead                 
         return child_states
     
