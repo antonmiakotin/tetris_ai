@@ -1,5 +1,5 @@
 runa: clean
-	python main.py -A 0rg.tgame 3 18 0 
+	python main.py -A 0rg.tgame 4 15 0 
 
 runl: clean
 	python main.py -L 0rg.tgame

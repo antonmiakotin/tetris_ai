@@ -12,7 +12,7 @@ debug = True
 # Method runs the algorithm
 class AggressiveSearch:
     @staticmethod
-    def run(board, piece_list, hi_threshold, low_threshold, game):
+    def run(board, piece_list, hi_threshold, low_threshold, game = 0):
         count = 0
         score = 0
         # for list of pieces
@@ -23,81 +23,89 @@ class AggressiveSearch:
         for piece in piece_list:
             # first grab the first set of states given the parent state
             state_tuples = Util.generate_child_states(init_state, piece)
-            # sort the states based on score
-            state_tuples = sorted(state_tuples, key=lambda state: state[0], reverse = True)
 
-
-            #hold all of the states to remove
-            pruned_states = []
-            state_with_line_removed = []
-            states_with_tetris = []
-            count += 1
-            for state_tuple in state_tuples:
-                # if under the current_threshold
-                if under_current_threshold(current_threshold, state_tuple[1].board.landed):
-                    current_threshold = hi_threshold
-                    # remove the ones where less than 4 lines have been created
-                    if state_tuple[1].lines_killed < 4:
-                        if state_tuple[1].lines_killed != 0:
-                            pruned_states.append(state_tuple)
-                    if state_tuple[1].lines_killed == 4:
-                        states_with_tetris.append(state_tuple)
-
-                #else place it in state_with_line_removed
-                else:
-                    current_threshold = low_threshold
-                    if state_tuple[1].lines_killed > 0:
-                        # choose this state
-                        state_with_line_removed.append(state_tuple)
-
-
-            if len(states_with_tetris) > 0:
-                states_with_tetris = sorted(states_with_tetris, key=lambda state: state[0], reverse = True)
-                if debug == True:
-                    print states_with_tetris[0][1].board
-                last_board = states_with_tetris[0][1].board
-                init_state = State.State(id, states_with_tetris.pop()[1].board, 0, None)
-                continue
-
-
-            #yikes we removed everything! undo undo!
-            if len(pruned_states) == len(state_tuples):
-                #unmark the last one because it's the best
-                pruned_states = pruned_states[:-1]
-                #we just lost the game
-                if len(pruned_states) == 0:
-                    break
-
-            if current_threshold == low_threshold:
-                state_with_line_removed = sorted(state_with_line_removed, key=lambda state: state[0], reverse = True)
-                if len(state_with_line_removed) > 0:
-                    state_tuples = state_with_line_removed
-            else:
-                #remove the ones we marked
-                for s in pruned_states:
-                    state_tuples.remove(s)
             
-            # remove all but the best choice
-#            if len(state_tuples) != 1:
-            state_tuples = state_tuples[:1]
+            
+            # You just lost the game
+            # ****************************************
+            if len(state_tuples) == 0:
+                print "lost game"
+                break
 
-            #grab the score
-            score += state_tuples[0][1].game_score
-        
-#            if not (len(state_tuples) == 0):
-            # make this the choice state. 
+            #****************************************
+            # split the states into 5 different lists
+            #****************************************
+            lines_list_4 = []
+            lines_list_3 = []
+            lines_list_2 = []
+            lines_list_1 = []
+            lines_list_0 = []
+            
+            for state_tuple in state_tuples:
+                if state_tuple[1].lines_killed == 4:
+                    lines_list_4.append(state_tuple)
+                elif state_tuple[1].lines_killed == 3:
+                    lines_list_3.append(state_tuple)
+                elif state_tuple[1].lines_killed == 2:
+                    lines_list_2.append(state_tuple)
+                elif state_tuple[1].lines_killed == 1:
+                    lines_list_1.append(state_tuple)
+                elif state_tuple[1].lines_killed == 0:
+                    lines_list_0.append(state_tuple)
+
+            #sort each of the lists
+            lines_list_4 = sorted(lines_list_4, key=lambda state: state[0], reverse = True)
+            lines_list_3 = sorted(lines_list_3, key=lambda state: state[0], reverse = True)
+            lines_list_2 = sorted(lines_list_2, key=lambda state: state[0], reverse = True)
+            lines_list_1 = sorted(lines_list_1, key=lambda state: state[0], reverse = True)
+            lines_list_0 = sorted(lines_list_0, key=lambda state: state[0], reverse = True)
+
+            
+            #if the current threshold is under the high threshold order them like 4 0 3 2 1
+            #then pick the best of those
+            if under_current_threshold(current_threshold, state_tuples[0][1].board.landed):
+                if debug == True:
+                    print "current mode: only tetrises"
+                current_threshold = hi_threshold
+                if len(lines_list_4) != 0:
+                    init_state = lines_list_4[0][1]
+
+                elif len(lines_list_0) != 0:
+                    init_state = lines_list_0[0][1]
+
+                elif len(lines_list_3) != 0:
+                    init_state = lines_list_3[0][1]
+
+                elif len(lines_list_2) != 0:
+                    init_state = lines_list_2[0][1]
+
+                elif len(lines_list_1) != 0:
+                    init_state = lines_list_1[0][1]
+
+            else:
+                current_threshold = low_threshold
+                if debug == True:
+                    print "current mode: knock it down"
+                if len(lines_list_4) != 0:
+                    init_state = lines_list_4[0][1]
+                elif len(lines_list_3) != 0:
+                    init_state = lines_list_3[0][1]
+                elif len(lines_list_2) != 0:
+                    init_state = lines_list_2[0][1]
+                elif len(lines_list_1) != 0:
+                    init_state = lines_list_1[0][1]
+                elif len(lines_list_0) != 0:
+                    init_state = lines_list_0[0][1]
+
+            
+            count += 1
+            score += init_state.game_score
             if debug == True:
-                print state_tuples[0][1].board
-                time.sleep(.5)
-            last_board = state_tuples[0][1].board
-            init_state = State.State(id, state_tuples.pop()[1].board, 0, None)
-                
-
-
-                
+                print init_state.board
+#                time.sleep(.5)
             # loop back and grab the next piece
 
-        # print the state of the last board
+        # print the state of the last board after everything is done
         print str(game) + "," + str(low_threshold) + "," + str(hi_threshold) + "," + str(score) + "," + str(count)
 
 def under_current_threshold(current_threshold, coord_list):
