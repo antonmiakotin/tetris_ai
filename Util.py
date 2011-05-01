@@ -1,4 +1,4 @@
-# This object should be used to generate all possible states
+# This object should be used to generate_child_states all possible states
 # for a piece to land. Should return a list of optional game
 # boards.
 
@@ -84,8 +84,16 @@ class Util:
                 #print "\tdown hit", down
                 already_hit.append(down)
                 touching_score += 1
+
             if ((down not in board.landed) and (down not in shape.get_coords()) and (down[1] < board.max_y)):
-                touching_score -= 5
+				y_coord = down[1]
+				#go down the column and discount 5 for every contiguous hole
+				for i in range(y_coord, board.max_y):
+					if (down[0],i) not in board.landed:
+						touching_score -= 5
+					else:
+						break
+
         depth_score = Util.get_bottom_block(shape)
         '''
         print "\tTouching: ", touching_score
@@ -101,8 +109,12 @@ class Util:
     def generate_child_states(state, shape_type):
         state.id = (state.id[0]+1, state.id[1])
         board = state.board
+        parent = state.board.parent
+
         #print shape_type
         child_states = []
+        
+        #how many times this shape can be rotated
         num_rotate = 1
         if shape_type == Shapes.t_shape:
             num_rotate = 4
@@ -111,68 +123,29 @@ class Util:
         elif shape_type == Shapes.l_shape or shape_type == Shapes.reverse_l_shape:
             num_rotate = 4
         elif shape_type == Shapes.i_shape:
-            num_rotate = 2
-        #print str(num_rotate)
-        
+            num_rotate = 2        
         id = 1
         
-
-
-        #move back tomorrow
         for i in range(num_rotate):
 
-            # This is a total hack, but works
-            can_move_right = True
-            can_move_right_plus_one = True
-            
+
             #move piece down the column
             for x in range(board.max_x):
                 score = 0
-                if not can_move_right_plus_one:
-                    # stop evaluating
-                    # you are about to repeat yourself
-                    break
+
                 
                 #actually create a piece from the class that was passed in
-                #starting at y=3, otherwise pieces don't have room to rotate
-                the_shape = shape_type.rel_check_and_create(board, (0,3))
-                shape_ahead = shape_type.rel_check_and_create(board, (0,3))
+                the_shape = shape_type.create(board)
 
-                
+                for j in range(i):
+                    #print "rotating clockwise"
+                    did_rotate = the_shape.rotate()
+                    #print "rotating: ", str(did_rotate)
 
-                #rotate shape to needed orientation
-                if the_shape:
-                     # Need to rotate the shape before moving it
-                    for j in range(i):
-                        #print "rotating clockwise"
-                        did_rotate = the_shape.rotate()
-                        did_ahead_rotate = shape_ahead.rotate()
-                        #print "rotating: ", str(did_rotate)
-                    
-                    '''
-                    good god this is ugly.  we need a way of checking one square
-                    ahead of the piece that we're moving.  instead of creating an 
-                    elegant function like you're supposed to, i've made another piece
-                    that we're rotating and moving along with our proper piece.
-                    if this second shape can't be moved any more to the right, we're done
-                    gross...
-                    '''
-                    
-                    
-                    #more hack for reverse_l and l shapes
-                    the_shape.move("left")
-                    shape_ahead = Shapes.shape(the_shape.board, the_shape.get_coords(), "blue")
-#                    shape_ahead = copy.deepcopy(the_shape)
-                    shape_ahead.move("right")
-                    
-                    for z in range(x):
-                        # keep track of this to pull us out of loop 
-                        
-                        can_move_right = the_shape.move("right")
-                        can_move_right_plus_one = shape_ahead.move("right")
-
-                
-                for y in range(3,board.max_y):
+                can_move_right = the_shape.move_to((x,0))
+                if not can_move_right:
+                    continue
+                for y in range(board.max_y):
 
                     #check to see that a piece can be created at the coordinate
                     if the_shape:
@@ -180,17 +153,18 @@ class Util:
                         if not canmove:
                             #either we've hit a piece or we've hit the bottom
                             #make a copy of the board
-                            child_board = Board(None)
+                            child_board = Board( parent )
+
                             child_board.landed = board.copy_landed()
+                            child_board.landed_tk = board.copy_landed_tk()
 
                             #calculate the score
                             score = Util.eval(the_shape, child_board)
 
                             #add the current piece to the 'landed' array of board
                             child_board.add_shape(the_shape)
-                            
                             #kills rows and return how many killed
-#                            lines_killed = child_board.check_for_complete_row()
+                            lines_killed = child_board.check_for_complete_row()
                             
                             #create a state that includes child board, the score and the parent board
                             #create child id
@@ -205,16 +179,18 @@ class Util:
                             #assign parent
                             #child_state.parent = state
                             #assign lines killed
-                            child_state.lines_killed = 0 #lines_killed
+
+                            child_state.lines_killed = lines_killed
                             #calc score
-                            # if lines_killed == 1:
-                            #     child_state.game_score += 40
-                            # elif lines_killed == 2:
-                            #     child_state.game_score += 100
-                            # elif lines_killed == 3:
-                            #     child_state.game_score += 300
-                            # elif lines_killed == 4:
-                            #     child_state.game_score += 1200
+                            if lines_killed == 1:
+                                child_state.game_score += 40
+                            elif lines_killed == 2:
+                                child_state.game_score += 100
+                            elif lines_killed == 3:
+                                child_state.game_score += 300
+                            elif lines_killed == 4:
+                                child_state.game_score += 1200
+
                             #print "Lines killed: ", str(lines_killed)
                             
                             #append a tuple that includes the score so we can sort
@@ -232,6 +208,5 @@ class Util:
         del board
         del state
         del the_shape
-        del shape_ahead                 
         return child_states
     

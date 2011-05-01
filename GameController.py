@@ -10,6 +10,7 @@ import tkMessageBox
 from Util import *
 import State
 
+
 NO_OF_LEVELS = 10
 SCALE = 20
 OFFSET = 3
@@ -90,7 +91,6 @@ class game_controller(object):
         self.board.pack(side=BOTTOM)
         self.board.focus()
         
-
         self.parent.bind("<Left>", self.left_callback)
         self.parent.bind("<Right>", self.right_callback)
         self.parent.bind("<Up>", self.up_callback)
@@ -103,7 +103,7 @@ class game_controller(object):
         self.shape = self.get_next_shape()
 
         self.after_id = self.parent.after( self.delay, self.move_my_shape )
-        
+
     def handle_move(self, direction):
         #if you can't move then you've hit something
         if not self.shape.move( direction ):
@@ -112,9 +112,7 @@ class game_controller(object):
             if direction == DOWN:
 
                 tmp_score = self.score
-                self.score += self.board.check_for_complete_row(
-                    self.shape.blocks
-                    )
+                self.score += self.board.check_for_complete_row()
                 #check for points added                
                 if(self.score > tmp_score):
                     self.status_window.log_text("POINTS " + str(self.score - tmp_score))
@@ -229,6 +227,12 @@ class game_controller(object):
         s = the_shape.check_and_create(self.board)
         self.status_window.new_shape(s)
         self.status_window.log_board(self.board)
+
+        # b = State.State((0,0),self.board,self.score,None)
+        # temp = Util.generate_child_states(b,s)
+        # print temp
+        # BoardStates.generate_child_states(self.board, the_shape)
+        #BoardStates.get_width_height(s)
         # b = State.State((0,0),self.board,self.score,None)
         # temp = Util.generate_child_states(b,s)
         # print temp
