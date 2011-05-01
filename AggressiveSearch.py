@@ -5,8 +5,9 @@
 # Stephen Kalpin
 from  Util import *
 import time
+import sys
 
-debug = True
+debug = False
 
 
 # Method runs the algorithm
@@ -25,6 +26,8 @@ class AggressiveSearch:
         self.init_state = State.State(self.id, board, 0, None)
         self.current_threshold = hi_threshold
         self.current_piece = 0
+        self.board.pack_tk()
+
 
         self.after_id = self.parent.after( 0, self.run)        
 
@@ -41,6 +44,10 @@ class AggressiveSearch:
             if len(state_tuples) == 0:
                 if debug == True:
                     print "lost self.game"
+                Toplevel().quit()
+                self.board.parent.quit()
+                print str(self.game) + "," + str(self.hi_threshold) + "," + str(self.low_threshold) + "," + str(self.score) + "," + str(self.count)
+                sys.exit(0)
                 return
 
             #****************************************
@@ -115,15 +122,26 @@ class AggressiveSearch:
                 print self.init_state.board
                 time.sleep(.5)
             # loop back and grab the next piece
-            self.board.destroy()
-            self.board = self.init_state.board
-            self.board.pack(side=BOTTOM)
-            self.board.focus()
+            # self.board = self.init_state.board
+            # self.board.pack(side=BOTTOM)
+            # self.board.focus()
+            self.board.canvas.delete(ALL)
+            for coord in self.init_state.board.landed:
+                self.board.add_block(coord, "blue")
+
+            for block in self.init_state.board.last_piece.blocks:
+                if block.coord() in self.init_state.board.landed:
+                    self.board.add_block(block.coord(),"red")
+
             self.current_piece += 1
-            self.after_id = self.parent.after( 1000, self.run)        
+            self.after_id = self.parent.after( 100, self.run )
             
-        # print the state of the last board after everything is done
-        print str(self.game) + "," + str(self.hi_threshold) + "," + str(self.low_threshold) + "," + str(self.score) + "," + str(self.count)
+        else:
+            Toplevel().quit()
+            self.board.parent.quit()
+            # print the state of the last board after everything is done
+            print str(self.game) + "," + str(self.hi_threshold) + "," + str(self.low_threshold) + "," + str(self.score) + "," + str(self.count)
+            sys.exit(0)
 
 def under_current_threshold(current_threshold, coord_list):
     y = 20

@@ -52,7 +52,8 @@ class shape(object):
         self.blocks = []
         
         for coord in coords:
-            block = Block(self.board.add_block( coord, color), coord)
+            # block = Block(self.board.add_block( coord, color), coord)
+            block = Block(0, coord)
             self.blocks.append( block )
             
     def copy_blocks(self):
