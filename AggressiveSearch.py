@@ -8,6 +8,7 @@ import time
 import sys
 
 debug = False
+pictures = False
 
 
 # Method runs the algorithm
@@ -27,7 +28,7 @@ class AggressiveSearch:
         self.current_threshold = hi_threshold
         self.current_piece = 0
         self.board.pack_tk()
-
+        self.tetris_count = 0
 
         self.after_id = self.parent.after( 0, self.run)        
 
@@ -46,7 +47,7 @@ class AggressiveSearch:
                     print "lost self.game"
                 Toplevel().quit()
                 self.board.parent.quit()
-                print str(self.game) + "," + str(self.hi_threshold) + "," + str(self.low_threshold) + "," + str(self.score) + "," + str(self.count)
+                print str(self.game) + "," + str(self.hi_threshold) + "," + str(self.low_threshold) + "," + str(self.score) + "," + str(self.tetris_count) + "," + str(self.count)
                 sys.exit(0)
                 return
 
@@ -87,6 +88,7 @@ class AggressiveSearch:
                 self.current_threshold = self.hi_threshold
                 if len(lines_list_4) != 0:
                     self.init_state = lines_list_4[0][1]
+                    self.tetris_count += 1
 
                 elif len(lines_list_0) != 0:
                     self.init_state = lines_list_0[0][1]
@@ -125,6 +127,8 @@ class AggressiveSearch:
             # self.board = self.init_state.board
             # self.board.pack(side=BOTTOM)
             # self.board.focus()
+            if pictures == True:
+                self.board.save_tk()
             self.board.canvas.delete(ALL)
             for coord in self.init_state.board.landed:
                 self.board.add_block(coord, "blue")
@@ -134,13 +138,13 @@ class AggressiveSearch:
                     self.board.add_block(block.coord(),"red")
 
             self.current_piece += 1
-            self.after_id = self.parent.after( 100, self.run )
+            self.after_id = self.parent.after( 1, self.run )
             
         else:
             Toplevel().quit()
             self.board.parent.quit()
             # print the state of the last board after everything is done
-            print str(self.game) + "," + str(self.hi_threshold) + "," + str(self.low_threshold) + "," + str(self.score) + "," + str(self.count)
+            print str(self.game) + "," + str(self.hi_threshold) + "," + str(self.low_threshold) + "," + str(self.score) + "," + str(self.tetris_count) + "," + str(self.count)
             sys.exit(0)
 
 def under_current_threshold(current_threshold, coord_list):

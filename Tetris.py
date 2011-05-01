@@ -26,7 +26,7 @@ if __name__ == "__main__":
     root.title("Tetris Tk")
     theGame = main.main(root, sys.argv)
     root.mainloop()
-    root.destroy()
+    sys.exit(0)
     
     # #run the game in file input mode
     # if(len(sys.argv) > 1):

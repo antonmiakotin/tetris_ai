@@ -66,7 +66,7 @@ class Board( Frame ):
     """
     The board represents the tetris playing area. A grid of x by y blocks.
     """
-    def __init__(self, parent, scale=40, max_x=10, max_y=20, offset=3):
+    def __init__(self, parent, scale=20, max_x=10, max_y=20, offset=3):
         """
         Init and config the tetris board, default configuration:
         Scale (block size in pixels) = 20
@@ -93,9 +93,15 @@ class Board( Frame ):
         self.offset = offset  
         #last piece that was added to the landed list 
         self.last_piece = None
+        self.ps_counter = 0
 
     def pack_tk( self ):
         self.canvas.pack()
+
+    def save_tk( self ):
+        filename = "saved_" + str(self.ps_counter) + ".ps"
+        self.canvas.postscript(file=filename, height=self.max_y * self.scale, width=self.max_x * self.scale, colormode="color")
+        self.ps_counter += 1
 
     def copy_landed_tk(self):
         new_landed_tk = {}
