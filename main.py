@@ -36,12 +36,13 @@ class main(object):
         if(len(self.argv) > 1):
             if ("-L" in self.argv) or ("-l" in self.argv):    # not that clever, just pass -L as the first argument
                 # and the filename as the second
-                fptr = open(self.argv[1], 'r')
+                print self.argv[2]
+                fptr = open(self.argv[2], 'r')
                 lines = fptr.readlines()
                 fptr.close()
                 pieces = shape.list_from_str_list(lines)
-                # pass in the board and the file name
-                local.run(self.board, pieces)
+                loc = local.local(self.board, pieces)
+                
             elif "-A" in self.argv:
                 fptr = open(self.argv[2], 'r')
                 lines = fptr.readlines()
