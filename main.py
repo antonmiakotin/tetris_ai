@@ -51,17 +51,17 @@ class main(object):
                 a = AggressiveSearch(self.board, pieces, int(self.argv[3]), int(self.argv[4]), int(self.argv[5]))
 
             elif ("-B" in self.argv) or ("-b" in self.argv):
-                fptr = open(self.argv[1], 'r')
+                fptr = open(self.argv[2], 'r')
                 lines = fptr.readlines()
                 fptr.close()
                 pieces = shape.list_from_str_list(lines)
                 # $> python main.py -b <game_file> <max_tree_depth> <branching_factor>
                 if len(self.argv) >= 5:
-                    bfs.run(self.board, pieces, int(self.argv[2]), int(self.argv[3]))
+                    b = bfs.bfs(self.board, pieces, int(self.argv[3]), int(self.argv[4]))
                 elif len(self.argv) == 4:
-                    bfs.run(self.board, pieces, int(self.argv[2]))
+                    b = bfs.bfs(self.board, pieces, int(self.argv[3]))
                 else:
-                    bfs.run(self.board, pieces)
+                    b = bfs.bfs(self.board, pieces)
         else:
             print "Usage -[LAB] [filename].tgame"
 
