@@ -6,7 +6,7 @@ import State
 import os
 
 panic_factor = 90
-gap_killing = True
+gap_killing = False
 
 def run(myBoard, myShapes, max_tree_depth=5, branching_factor=2):
 	
@@ -23,7 +23,7 @@ def run(myBoard, myShapes, max_tree_depth=5, branching_factor=2):
         best_states_at_old_depth = getHighestScoringStates(state_queue)
         # Use the same shape to generate child states for all current states in the queue
         for i in range(len(state_queue)):
-            child_states = getSortedChildStates( state_queue[0], shape_queue[0] )
+            child_states = getSortedChildStates( state_queue[0], shape_queue[0], False )
             current_board = state_queue[0].board
             state_queue.remove(state_queue[0])
             
@@ -48,6 +48,11 @@ def run(myBoard, myShapes, max_tree_depth=5, branching_factor=2):
             print 'Restarting BFS from best state...'
             #os.system('pause')
             state_queue = [getHighestScoringStates(state_queue)[0]]
+##            best_local_state = state_queue[0]
+##            for st in state_queue:
+##                if st.score > best_local_state.score:
+##                    best_local_state = st
+##            state_queue = [best_local_state]
             print str(state_queue[0])
             print 'Shape', str(total_shapes - len(shape_queue)), '/', str(total_shapes)
             print 'Num blocks on board:', str(len(state_queue[0].board.landed))
@@ -69,17 +74,6 @@ def run(myBoard, myShapes, max_tree_depth=5, branching_factor=2):
         return best_states_at_old_depth[0]
 
 def get_min_kill(board, num_of_shapes_remaining):
-##    if (board.last_piece):
-##        gaps = get_gaps(board)
-##        last_part_coordinates = board.last_piece.get_coords()
-##
-##        highest_gap = get_y_min_and_max(gaps)[0]
-##        lowest_spot_of_shape = get_y_min_and_max(last_part_coordinates)[1]
-##
-##        # If there is a gap below the shape somewhere, don't even try to kill more than 1 line
-##        if lowest_spot_of_shape > highest_gap:
-##            return 0
-
     num_blocks_on_board = len(board.landed)
     min_lines_to_kill = 0
     # num_blocks_avail is just the total number of blocks on the board plus the blocks yet to drop.
@@ -96,8 +90,8 @@ def get_min_kill(board, num_of_shapes_remaining):
         min_lines_to_kill = 1
     return min_lines_to_kill
     
-def getSortedChildStates(myCurrentState, shape):
-    result_tuples = Util.Util.generate_child_states(myCurrentState, shape)
+def getSortedChildStates(myCurrentState, shape, column_detection):
+    result_tuples = Util.Util.generate_child_states(myCurrentState, shape, column_detection)
     child_states = sorted(result_tuples, key=lambda myCurrentState: myCurrentState[0], reverse = True)
     result_states = []
     for tup in child_states:

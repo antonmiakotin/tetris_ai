@@ -41,7 +41,7 @@ class Util:
     
     #assigns value to the block's placement
     @staticmethod
-    def eval(shape, board):
+    def eval(shape, board, column_detection):
         # +1 for every touching square, + y-coordinate
         #bottom and sides count
         total_score = 0
@@ -86,13 +86,17 @@ class Util:
                 touching_score += 1
 
             if ((down not in board.landed) and (down not in shape.get_coords()) and (down[1] < board.max_y)):
-				y_coord = down[1]
-				#go down the column and discount 5 for every contiguous hole
-				for i in range(y_coord, board.max_y):
-					if (down[0],i) not in board.landed:
-						touching_score -= 5
-					else:
-						break
+                if column_detection:
+		    y_coord = down[1]
+                    #go down the column and discount 5 for every contiguous hole
+                    for i in range(y_coord, board.max_y):
+                        if (down[0],i) not in board.landed:
+                            touching_score -= 5
+			else:
+                            break
+                else:
+                    touching_score -= 5
+        
         depth_score = Util.get_bottom_block(shape)
         '''
         print "\tTouching: ", touching_score
@@ -105,7 +109,7 @@ class Util:
 
     
     @staticmethod
-    def generate_child_states(state, shape_type):
+    def generate_child_states(state, shape_type, column_detection = True):
         state.id = (state.id[0]+1, state.id[1])
         board = state.board
         
@@ -155,7 +159,7 @@ class Util:
                             child_board.landed = board.copy_landed()
 
                             #calculate the score
-                            score = Util.eval(the_shape, child_board)
+                            score = Util.eval(the_shape, child_board, column_detection)
 
                             #add the current piece to the 'landed' array of board
                             child_board.add_shape(the_shape)
