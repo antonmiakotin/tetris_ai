@@ -25,8 +25,7 @@ def run(myBoard, myShapes, max_tree_depth=5, branching_factor=2):
         for i in range(len(state_queue)):
             child_states = getSortedChildStates( state_queue[0], shape_queue[0], False )
             current_board = state_queue[0].board
-            state_queue.remove(state_queue[0])
-            
+            state_queue.remove(state_queue[0])         
             # we need to prune some child states to reduce the state space.
             # get_min_kill() will tell us the minimum number of lines we are allowed to kill
             min_kill = get_min_kill(current_board, len(shape_queue))
@@ -41,18 +40,12 @@ def run(myBoard, myShapes, max_tree_depth=5, branching_factor=2):
             lost = True
             break
         tree_depth += 1
-        # print 'DEPTH =', str(tree_depth)
         # If the tree gets too deep, we need to start over at the best state so far
         if tree_depth >= max_tree_depth:
             print '.'
             print 'Restarting BFS from best state...'
             #os.system('pause')
             state_queue = [getHighestScoringStates(state_queue)[0]]
-##            best_local_state = state_queue[0]
-##            for st in state_queue:
-##                if st.score > best_local_state.score:
-##                    best_local_state = st
-##            state_queue = [best_local_state]
             print str(state_queue[0])
             print 'Shape', str(total_shapes - len(shape_queue)), '/', str(total_shapes)
             print 'Num blocks on board:', str(len(state_queue[0].board.landed))
@@ -111,7 +104,7 @@ def getHighestScoringStates(list_of_states):
             return_list.append(temp_state)
     return return_list
 
-# This method will prune the states that kill 1 or more rows but don't kill at least kill_min states
+# This function will prune the states that kill 1 or more rows but don't kill at least kill_min states
 # Also, it will return no more than num_to_return states
 def prune_states(state_list, num_to_return, kill_min):
     pruned_list = []
@@ -124,7 +117,7 @@ def prune_states(state_list, num_to_return, kill_min):
             break
     return pruned_list
 
-# This method returns a list of all the gap tuples in the board
+# This function returns a list of all the gap tuples in the board
 def get_gaps(board):
     gaps = []
     found_top = False
